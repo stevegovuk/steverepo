@@ -1,0 +1,13 @@
+ Volume in drive D is Data
+ Volume Serial Number is 4E7A-A9C2
+
+ Directory of D:\Test1
+
+11/02/2019  14:42    <DIR>          .
+11/02/2019  14:42    <DIR>          ..
+11/02/2019  14:42                 0 dir.txt
+11/02/2019  13:51    <DIR>          MyFolder
+11/02/2019  14:30                77 test.txt
+08/02/2019  11:47                26 test2.txt
+               3 File(s)            103 bytes
+               3 Dir(s)  45,597,396,992 bytes free
