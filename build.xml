@@ -1,0 +1,738 @@
+<?xml version = '1.0' encoding = 'UTF-8' ?>
+
+<!-- Set the base to the top of the LER_Source VOB -->
+<project name="LER Source" default="make" basedir="..\.." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+	<echo message="### PROJECT BUILD FILE: LIFE EVENTS REDEVELOPMENT ###" />
+	<echo message="basedir: ${basedir}" />
+
+	<!-- ************************************************************************************** -->
+	<!-- Properties specific to the global (system level) build.                                -->
+	<!-- ************************************************************************************** -->
+	<tstamp />
+	<property environment="env" />
+	<property name="envDir" value="${envDir}" />
+	<property name="ant.lib.dir" value="${basedir}/../SMP_DevTools/Tools/build/antbuildfiles" />
+	<property name="ledr_db_dir" value="../../DB/build.xml" />
+	<property name="ledr_talend_dir" value="${basedir}/Talend" />
+	<property name="u01_dir" value="/u01" />
+	<property name="mvn.home" value="${env.SMP_TOOLS_DIR}/Apache/Maven/apache-maven-2.2.1" />
+	<property name="password.file.location" value="/u01/app/properties" />
+
+	<taskdef name="wldeploy" classname="weblogic.ant.taskdefs.management.WLDeploy">
+		<classpath>
+			<pathelement location="/Oracle/mw11g/wlserver_10.3/server/lib/weblogic.jar"/>
+			<pathelement location="/oracle/mw11g_10.3.6.0/wlserver_10.3/server/lib/weblogic.jar"/>
+		</classpath>
+	</taskdef>
+
+	<target name="checkWL">
+		<echo message="Weblogic lives in ${env.WL_HOME}"/>
+	</target>
+	<!-- ************************************************************************************** -->
+	<!-- IMPORT files containing targets for J2EE and DB deployment)                            -->
+	<!-- ************************************************************************************** -->
+	<!-- Set location of generic Ant files to be imported by project-local counterparts -->
+
+	<import file="directory-base.xml" />
+	<import file="deploy-lib-java.xml" />
+	<import file="deploy-lib-db.xml" />
+	<import file="deploy-lib-init.xml" />
+	<import file="buildInfo.xml" />
+	<import file="baselineCreate.xml" />
+	<property name="project" value="LEDR" />
+
+	<!-- ************************************************************************************** -->
+	<!-- 	Get environment properties                                                          -->
+	<!-- ************************************************************************************** -->
+	<target name="env-params">
+		<stopwatch name="timer"/>
+		<tstamp>
+			<format property="TODAY_UK" pattern="dd-MMM-yyyy_HH.mm" locale="en_GB"/>
+		</tstamp>
+
+		<!-- Get current target -->
+		<if>
+			<isset property="ant.project.invoked-targets"/>
+			<then>
+				<property name="current.target" value ="${ant.project.invoked-targets}"/>
+			</then>
+			<else>
+				<property name="current.target" value ="out"/>
+			</else>
+		</if>
+	
+		<!-- If not set, default the environment to LOCAL -->
+		<property name="env" value="local"/>
+		<if>
+			<equals arg1="${env}" arg2="local"/>
+			<then>
+				<property name="db.schema" value="${env.USERNAME}"/>
+			</then>
+		</if>
+		<property file="${password.file.location}/${env}_passwords.properties"/>
+		<property file="System/properties/${env}_params.properties"/>
+		<property file="System/properties/common_${env.family}.properties"/>
+		<property file="System/properties/common.properties"/>
+		<property name="config.template.dir" value="System/build"/>
+		<record name="ledr-${env}-${DSTAMP}-${TSTAMP}-${current.target}.log"/>
+	</target>
+
+	<!-- ************************************************************************************** -->
+	<!-- 	Targets for System build                                                            -->
+	<!-- ************************************************************************************** -->
+	<target name="ledr-params" depends="env-params, -init-list-properties" description="List environment properties" />
+	<target name="ledr-system-build" depends="copy-build-info, package-release" description="Create release package" />
+	<target name="dev-build" depends="copy-build-info, rebuild, package-release" description="Create release package" />
+
+	<target name="copy-build-info" depends="-init" description="make build information available to release package">
+		<property file="buildinfo/build.properties" />
+	</target>
+
+	<!-- ************************************************************************************** -->
+	<!--                               Create Maven packages                                    -->
+	<!-- ************************************************************************************** -->
+
+	<target name="maven-build" description="run maven to build app">
+
+		<replace file="${basedir}/system/build/pom.xml" token="XX.XX.XX" value="${newReleaseNumber}" />
+
+		<artifact:mvn pom="${basedir}/system/build/pom.xml" mavenHome="${mvn.home}" fork="true">
+			<arg value="clean" />
+			<arg value="install" />
+		</artifact:mvn>
+
+		<replace file="${basedir}/system/build/pom.xml" token="${newReleaseNumber}" value="XX.XX.XX" />
+	</target>
+
+	<!-- ===================================================== -->
+	<!-- Create Talend and Cuke Test configuration parameters                                                -->
+	<!-- ===================================================== -->
+	<target name="create-config" depends="env-params, -init-config" description="Generate the Talend and Cuke Test configuration files" />
+	
+	<!-- ************************************************************************************** -->
+	<!-- CREATE THE RELEASE PACKAGE                                                             -->
+	<!-- ************************************************************************************** -->
+	<target name="package-release" depends="createSnapshot, init-build-info, maven-build">
+
+		<!-- These will only be set here if the directory and zip file have not been named for a release. -->
+		<if>
+			<equals arg1="${cd.build}" arg2="CDBUILD" />
+			<then>
+				<property name="release.zip.dest.dir" value="${release.dir}/${newReleaseNumber}" />
+				<property name="releasable.java.zip" value="${release.dir}/${newReleaseNumber}.zip" />
+				<echo message="${newReleaseNumber}," file="//fa1rpwapxx272//ONS//release//LEDR//store//LEDR_releases.txt" append="true" />
+			</then>
+			<else>
+				<property name="release.zip.dest.dir" value="${release.dir}/${project.name}-${DSTAMP}-${TSTAMP}" />
+				<property name="releasable.java.zip" value="${release.dir}/${project.name}-${DSTAMP}-${TSTAMP}.zip" />
+			</else>
+		</if>
+
+		<!-- Other packaging properties. -->
+		<property name="deploy.script.dir" value="${release.zip.dest.dir}/deployment" />
+		<property name="deployment.lib.dir" value="${deploy.script.dir}/lib" />
+		<property name="deployment.domain.dir" value="${deploy.script.dir}/domain" />
+		<property name="bart.deploy.script.dir" value="${deploy.script.dir}/bart" />
+		<property name="deployment.templates.dir" value="${deploy.script.dir}/templates" />
+		<property name="j2ee.dir" value="${release.zip.dest.dir}/j2ee" />
+		<property name="j2ee.config.dir" value="${j2ee.dir}/config" />
+		<property name="j2ee.deployments.dir" value="${j2ee.dir}/deployments" />
+		<property name="deployt.build.info.dir" value="${release.zip.dest.dir}/buildinfo" />
+		<property name="deployment.tools.dir" value="${release.zip.dest.dir}/tools" />
+		<property name="services.dir" value="${release.zip.dest.dir}/services" />
+
+		<!-- Clean and prepare release directory structure. -->
+		<mkdir dir="${release.dir}" />
+		<mkdir dir="${release.zip.dest.dir}" />
+
+		<!-- Add build information file to release package -->
+		<copy file="${build.info.file}" todir="${deployt.build.info.dir}" verbose="true" flatten="true" failonerror="false" preservelastmodified="true" />
+
+		<!-- Copy over the JDK to be used to run Ant and services -->
+		<!--copy todir="${services.dir}/jdk/jdk160_14_R27.6.5-32" preservelastmodified="true">
+			<fileset dir="${tools.dir}/jdk/jdk160_14_R27.6.5-32" />
+		</copy-->
+
+		<!-- Copy over Ant to be used for installation, deployment and control of service components -->
+		<!--copy todir="${services.dir}/ant/apache-ant-1.9.3" preservelastmodified="true">
+			<fileset dir="${tools.dir}/ant/apache-ant-1.9.3" />
+		</copy-->
+
+		<!-- Copy deployments here -->
+		<copy file="${lerp.ear}" todir="${j2ee.deployments.dir}" verbose="true" preservelastmodified="true" />
+
+		<!-- Copy the application server resources ("config" directory contents) -->
+		<copy file="${release.template.dir}/config/log4j.xml" todir="${j2ee.config.dir}" verbose="true" preservelastmodified="true" />
+		<copy file="${basedir}/../SMP_DevTools/Tools/build/antbuildfiles/createplantemplate.bat" todir="${deployment.lib.dir}" verbose="true" preservelastmodified="true" />
+		<!-- <copy file="${release.template.dir}/????.xml" todir="${deployment.templates.dir}" verbose="true" preservelastmodified="true"/> -->
+
+		<!-- Copy the database installation scripts -->
+		<copy todir="${release.zip.dest.dir}/db" preservelastmodified="true">
+			<fileset dir="${db.dir}">
+				<exclude name="**/*.contrib*" />
+				<exclude name="**/*.lst" />
+				<exclude name="**/*.log" />
+				<exclude name="Talend/*.zip" />
+			</fileset>
+		</copy>
+
+		<!-- Copy the properties files -->
+		<copy todir="${release.zip.dest.dir}/deployment/properties" preservelastmodified="true">
+			<fileset dir="${system.lib.dir}/properties">
+				<include name="**/*.properties" />
+			</fileset>
+		</copy>
+
+		<!-- Copy the Talend and Cuke test template files -->
+		<copy todir="${release.zip.dest.dir}/deployment/properties" preservelastmodified="true">
+			<fileset dir="${system.lib.dir}/build">
+				<include name="**/param*.properties" />
+			</fileset>
+		</copy>
+
+		<!-- Copy the Talend generate jobs -->
+		<copy todir="${release.zip.dest.dir}/Talend" preservelastmodified="true">
+			<fileset dir="${basedir}/Talend">
+				<exclude name="**/*.log" />
+				<exclude name="**/*.zip" if="ignore.talendjobs" />
+			</fileset>
+		</copy>
+		<echo file="${release.zip.dest.dir}/Talend/TalendJobs/LEDR/current_ledr_release.txt" append="false" message="${newReleaseNumber}" />
+
+		<!-- Copy environment setup scripts   -->
+		<copy file="${system.lib.dir}/build/setenv.bat" todir="${bart.deploy.script.dir}" verbose="true" preservelastmodified="true" />
+		<copy file="${system.lib.dir}/build/setenv2.bat" todir="${bart.deploy.script.dir}" verbose="true" preservelastmodified="true" />
+		<copy file="${system.lib.dir}/build/setenv.sh" todir="${bart.deploy.script.dir}" verbose="true" preservelastmodified="true" />
+		<copy file="${system.lib.dir}/build/setenvOTS.sh" todir="${bart.deploy.script.dir}" verbose="true" preservelastmodified="true" />
+		<copy file="${basedir}/../SMP_DevTools/Tools/smpdev/setWlsEnv.bat" todir="${bart.deploy.script.dir}" verbose="true" preservelastmodified="true" />
+		<copy file="${system.lib.dir}/build/setWlsEnv.sh" todir="${bart.deploy.script.dir}" verbose="true" preservelastmodified="true" />
+		<copy file="${system.lib.dir}/build/setWlsEnvOTS.sh" todir="${bart.deploy.script.dir}" verbose="true" preservelastmodified="true" />
+
+		<copy file="${system.lib.dir}/build/talendDeployment/TalendJobDeploy.java" todir="${deployment.tools.dir}/talendDeployment" verbose="true" preservelastmodified="true" />
+		<copy file="${system.lib.dir}/build/talendDeployment/ojdbc6.jar" todir="${deployment.tools.dir}/talendDeployment" verbose="true" preservelastmodified="true" />
+		<copy file="${system.lib.dir}/build/talendDeployment/commons-net-3.3.jar" todir="${deployment.tools.dir}/talendDeployment" verbose="true" preservelastmodified="true" />
+		<copy file="${system.lib.dir}/build/talendDeployment/json-20140107.jar" todir="${deployment.tools.dir}/talendDeployment" verbose="true" preservelastmodified="true" />
+
+		<copy file="${system.lib.dir}/build/dbdeploy/dbdeploy-ant-3.0M3.jar" todir="${deployment.tools.dir}/dbdeploy" verbose="true" preservelastmodified="true" />
+		<copy file="${system.lib.dir}/build/dbdeploy/dbdeploy-core-3.0M3.jar" todir="${deployment.tools.dir}/dbdeploy" verbose="true" preservelastmodified="true" />
+		<copy file="${system.lib.dir}/build/dbdeploy/ojdbc6.jar" todir="${deployment.tools.dir}/dbdeploy" verbose="true" preservelastmodified="true" />
+
+
+		<copy file="${release.template.dir}/deltaControl.xml" tofile="${deployment.lib.dir}/deltaControl.xml" verbose="true" preservelastmodified="true" />
+
+		<!-- Copy deployment and appc scripts -->
+		<copy file="${system.lib.dir}/build/deploy.sh" todir="${deployment.lib.dir}" verbose="true" preservelastmodified="true" />
+		<copy file="${system.lib.dir}/build/deploy.bat" todir="${deployment.lib.dir}" verbose="true" preservelastmodified="true" />
+		<copy file="${system.lib.dir}/build/cc-appc.sh" todir="${deployment.lib.dir}" verbose="true" preservelastmodified="true" />
+		<copy file="${basedir}/../SMP_DevTools/Tools/build/antbuildfiles/cc-appc.cmd" todir="${deployment.lib.dir}" verbose="true" preservelastmodified="true" />
+
+		<copy todir="${deployment.domain.dir}" preservelastmodified="true">
+			<fileset dir="${basedir}/../SMP_DevTools/Tools/build/domain">
+				<include name="**/*" />
+				<exclude name="wlstutility/*" />
+				<exclude name="wlstutility" />
+				<exclude name="update_configuration.py" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${bart.deploy.script.dir}/wlstutility" />
+
+		<copy todir="${bart.deploy.script.dir}/wlstutility" preservelastmodified="true">
+			<fileset dir="${basedir}/../SMP_DevTools/Tools/build/domain/wlstutility" />
+		</copy>
+
+		<copy file="${release.template.dir}/domain/domain_setup.properties" todir="${deployment.domain.dir}" verbose="true" preservelastmodified="true" />
+		<copy file="${release.template.dir}/domain/domain_update.properties" todir="${deployment.domain.dir}" verbose="true" preservelastmodified="true" />
+		<copy file="${release.template.dir}/domain/update_configuration.py" todir="${deployment.domain.dir}" verbose="true" preservelastmodified="true" />
+		<copy file="${release.template.dir}/build.xml" tofile="${bart.deploy.script.dir}/build.xml" verbose="true" preservelastmodified="true" />
+		<copy file="${release.template.dir}/envUpdate.xml" tofile="${bart.deploy.script.dir}/envUpdate.xml" verbose="true" preservelastmodified="true" />
+
+
+		<copy file="${system.lib.dir}/build/deploy-lib-java.xml" todir="${deployment.lib.dir}" verbose="true" preservelastmodified="true" />
+		<copy file="${system.lib.dir}/build/deploy-lib-db.xml" todir="${deployment.lib.dir}" verbose="true" preservelastmodified="true" />
+		<copy file="${system.lib.dir}/build/deploy-lib-init.xml" todir="${deployment.lib.dir}" verbose="true" preservelastmodified="true" />
+
+		<copy file="${basedir}/../SMP_DevTools/Tools/build/antbuildfiles/smp-deploy-lib-java.xml" todir="${deployment.lib.dir}" verbose="true" preservelastmodified="true" />
+		<copy file="${basedir}/../SMP_DevTools/Tools/build/antbuildfiles/smp-deploy-lib-db.xml" todir="${deployment.lib.dir}" verbose="true" preservelastmodified="true" />
+		<copy file="${basedir}/../SMP_DevTools/Tools/build/smpant/dist/ant-smp.jar" todir="${deployment.tools.dir}/smpant" verbose="true" preservelastmodified="true" />
+
+
+		<copy file="${basedir}/../SMP_DevTools/ThirdParty/apache/log4j/log4j-1.2.8/dist/lib/log4j-1.2.8.jar" todir="${deployment.tools.dir}/log4j" verbose="true" preservelastmodified="true" />
+
+		<!--copy todir="${deployment.tools.dir}/ant/apache-ant-1.9.3" verbose="true" preservelastmodified="true">
+			<fileset dir="${basedir}/../SMP_DevTools/Tools/ant/apache-ant-1.9.3">
+				<include name="**/*" />
+			</fileset>
+		</copy-->
+
+		<!-- Copy the managed server scripts to Domain folder -->
+		<copy todir="${deployment.domain.dir}/" preservelastmodified="true">
+			<fileset dir="${release.template.dir}/domain">
+				<include name="*.py" />
+			</fileset>
+		</copy>
+
+		<!-- Copy the template directory for deployment -->
+		<copy todir="${deployment.templates.dir}" verbose="true" preservelastmodified="true">
+			<fileset dir="${release.template.dir}/templates" />
+		</copy>
+
+		<!--<copy file="${release.template.dir}/docs/metrics_marker.txt" todir="${release.zip.dest.dir}/buildinfo"/>-->
+
+		<!--if>
+			<equals arg1="${cd.build}" arg2="CDBUILD" />
+			<then>
+				<copy todir="//fa1rpwapxx272/ONS/release/LEDR/store" verbose="true" preservelastmodified="true">
+					<fileset dir="${release.dir}" />
+				</copy>
+			</then>
+		</if-->
+
+		<antcall target="logtimestamp">
+			<param name="targetname" value="package-release" />
+		</antcall>
+
+	</target>
+
+	<!-- This target is used to build the release package and deploy from the release package..-->
+	<target name="CI-build-deploy" description="Deploys to the given environments from integration stream...">
+
+		<fail unless="CI_DEPLOY_ENV" message="Please provide for which environment the deployment is for.Example: -DCI_DEPLOY_ENV=NA_ST3" />
+		<fail unless="db.pwd" message="Please provide database password in the command line parameter. Example:  -Ddb.pwd=BLABLABLA" />
+
+		<antcallback target="ledr-system-build" inheritall="false" return="newReleaseNumber">
+			<param name="cd.build" value="CDBUILD" />
+		</antcallback >
+
+		<antcall target="zipAndcopy_Release" />
+
+		<property name="deploy_dir" value="${env.LEDR_RELEASE_REPO}/${newReleaseNumber}/${newReleaseNumber}" />
+		<echo message=" Unzipping the relase package ${deploy_dir}.zip...." />
+		<unzip src="${deploy_dir}.zip" dest="${env.LEDR_RELEASE_REPO}\\${newReleaseNumber}" overwrite="true" />
+
+		<antcall target="CI.deploy.targets" />
+
+	</target>
+
+	<!-- This target is used to build the release package and deploy from the release package..-->
+	<target name="CI-build-deploy-deaths-fix" description="Deploys to the given environments from deaths fix stream...">
+
+		<fail unless="CI_DEPLOY_ENV" message="Please provide for which environment the deployment is for.Example: -DCI_DEPLOY_ENV=NA_ST3" />
+		<fail unless="db.pwd" message="Please provide database password in the command line parameter. Example:  -Ddb.pwd=BLABLABLA" />
+
+		<antcallback target="ledr-system-build" inheritall="false" return="newReleaseNumber">
+			<param name="cd.build" value="CDBUILD" />
+		</antcallback >
+
+		<antcall target="zipAndcopy_Release_DeathsFix" />
+
+		<property name="deploy_dir" value="${env.LEDR_RELEASE_REPO}/${newReleaseNumber}/${newReleaseNumber}" />
+		<echo message=" Unzipping the relase package ${deploy_dir}.zip...." />
+		<unzip src="${deploy_dir}.zip" dest="${env.LEDR_RELEASE_REPO}\\${newReleaseNumber}" overwrite="true" />
+
+		<antcall target="CI.deploy.targets" />
+
+	</target>
+
+	<!-- This target is used to Deploy DATA DICTIONARY APPLICATION -->
+	<target name="CI.deploy.DDApp" depends="prepare.deployments">
+
+		<fail unless="deploy_dir" message="Please provide from which release folder the deployment needs to run...-Ddeploy_dir=latest" />
+		<fail unless="BUILD_NUMBER" message="Please provide  Jenkin's $BUILD_NUMBER the deployment needs to run...-DBUILD_NUMBER=$BUILD_NUMBER" />
+
+		<ant dir="${deploy_dir}/deployment/bart" inheritAll="false" target="${CI_DEPLOY_ENV}-dd-app-install" />
+
+	</target>
+
+	<!-- This target is used to just deploy from an an existing release package from E:\ons\release\LEDR..-->
+	<target name="CI.deploy.targets" depends="prepare.deployments">
+
+		<fail unless="deploy_dir" message="Please provide from which release folder the deployment needs to run...-Ddeploy_dir=latest" />
+		<fail unless="BUILD_NUMBER" message="Please provide  Jenkin's $BUILD_NUMBER the deployment needs to run...-DBUILD_NUMBER=$BUILD_NUMBER" />
+
+		<!--LEDR APPLICATION DEPLOYMENT goes here-->
+		<if>
+			<equals arg1="${DATA_KEEP_STRATEGY}" arg2="WipeData" />
+
+			<then>
+				<!-- Build LEDR DB schemas -->
+				<echo message="Progressing with LEDR DB deployment." />
+
+				<ant dir="${deploy_dir}/deployment/bart" inheritAll="false" target="ledr-redeploy-db">
+					<property name="onsdba.password" value="${ons.dba.pwd}" />
+					<property name="db.clean.confirm" value="y" />
+					<property name="env" value="${CI_DEPLOY_ENV}" />
+				</ant>
+
+				<!-- Build reference data -->
+				<ant dir="${deploy_dir}/deployment/bart" inheritAll="false" target="ledr-refdata">
+					<property name="onsdba.password" value="${ons.dba.pwd}" />
+					<property name="env" value="${CI_DEPLOY_ENV}" />
+				</ant>
+
+				<!-- Build archive schema -->
+				<ant dir="${deploy_dir}/deployment/bart" inheritAll="false" target="ledr-redeploy-arch-db">
+					<property name="onsdba.password" value="${ons.dba.pwd}" />
+					<property name="db.clean.confirm" value="y" />
+					<property name="env" value="${CI_DEPLOY_ENV}" />
+				</ant>
+
+				<!-- Build data migration schema -->
+				<ant dir="${deploy_dir}/deployment/bart" inheritAll="false" target="ledr-redeploy-dm-db">
+					<property name="onsdba.password" value="${ons.dba.pwd}" />
+					<property name="db.clean.confirm" value="y" />
+					<property name="env" value="${CI_DEPLOY_ENV}" />
+				</ant>
+
+			</then>
+			<else>
+				<echo message="***DB Deployment has been skipped because, tester want to test just the UI and wante to keep the data in the database.***" />
+			</else>
+		</if>
+
+		<if>
+			<equals arg1="${INSTALL_DELTAS}" arg2="YES"/>
+			<then>
+				<echo message="Commencing installation of deltas!"/>
+
+				<ant dir="${deploy_dir}/deployment/bart" inheritAll="false" target="ledr-delta-install">
+					<property name="onsdba.password" value="${ons.dba.pwd}" />
+					<property name="env" value="${CI_DEPLOY_ENV}" />
+				</ant>
+			</then>
+			<else>
+				<echo message="Skipping installation of deltas!"/>
+			</else>
+		</if>
+
+		<condition property="contains_x">
+			<contains string="${CI_DEPLOY_ENV}" substring="_x" />
+		</condition>
+		<echo message=" contains_x is ${contains_x}" />
+
+		<if>
+			<equals arg1="${contains_x}" arg2="true" />
+			<then>
+				<!-- No need to java deployment for x-schemas -->
+				<echo message="Deployed X-schema ONLY as requested." />
+			</then>
+			<else>
+				<echo message=" Full LEDR deployment with UI, JAVA, Talend and web services is being done." />
+
+				<ant dir="${deploy_dir}/deployment/bart" inheritAll="false" target="ledr-deploy-java">
+					<property name="onsdba.password" value="${ons.dba.pwd}" />
+					<property name="env" value="${CI_DEPLOY_ENV}" />
+				</ant>
+
+				<ant dir="${deploy_dir}/deployment/bart" inheritAll="false" target="ledr-deploy-talendws">
+					<property name="deployable.id" value="j710_ResolveIssues" />
+					<property name="env" value="${CI_DEPLOY_ENV}" />
+				</ant>
+
+				<ant dir="${deploy_dir}/deployment/bart" inheritAll="false" target="ledr-deploy-talendjobs">
+					<property name="env" value="${CI_DEPLOY_ENV}" />
+				</ant>
+
+				<echo message=" Full LEDR deployment is completed successfully." />
+			</else>
+		</if>
+	</target>
+
+	<target name="zipAndcopy_Release_DeathsFix">
+		<property name="release.package.dir" value="${release.dir}/${newReleaseNumber}" />
+		<property name="release.package.dir.zip" value="${release.package.dir}.zip" />
+		<property name="jenkins_release.dir" value="//fa1rpwapxx272/ons/release/LEDR/LEDR_Jenkins_Deaths_Fix_Releases" />
+
+		<fixcrlf srcdir="${release.package.dir}" includes="**/*.sh"  eol="lf" eof="remove" />
+		<fixcrlf srcdir="${release.package.dir}" includes="**/*.csv"  eol="lf" eof="remove" />
+		<fixcrlf srcdir="${release.package.dir}" includes="**/*.ctl"  eol="lf" eof="remove" />
+		<!--fixcrlf srcdir="${release.package.dir}" includes="**/*.bat" eol="crlf" /-->
+
+		<zip destfile="${release.package.dir.zip}">
+			<zipfileset dir="${release.package.dir}" prefix="${newReleaseNumber}" filemode="777" dirmode="777" />
+		</zip>
+
+		<mkdir dir="${jenkins_release.dir}/${newReleaseNumber}" />
+		<copy file="${release.package.dir.zip}" todir="${jenkins_release.dir}/${newReleaseNumber}" verbose="true" preservelastmodified="true" overwrite="true" />
+
+	</target>
+
+	<target name="zipAndcopy_Release">
+		<property name="release.package.dir" value="${release.dir}/${newReleaseNumber}" />
+		<property name="release.package.dir.zip" value="${release.package.dir}.zip" />
+		<property name="jenkins_release.dir" value="//fa1rpwapxx272/ons/release/LEDR/LEDR_Jenkins_Releases" />
+
+		<fixcrlf srcdir="${release.package.dir}" includes="**/*.sh"  eol="lf" eof="remove" />
+		<fixcrlf srcdir="${release.package.dir}" includes="**/*.csv"  eol="lf" eof="remove" />
+		<fixcrlf srcdir="${release.package.dir}" includes="**/*.ctl"  eol="lf" eof="remove" />
+		<!--fixcrlf srcdir="${release.package.dir}" includes="**/*.bat" eol="crlf" /-->
+
+		<zip destfile="${release.package.dir.zip}">
+			<zipfileset dir="${release.package.dir}" prefix="${newReleaseNumber}" filemode="777" dirmode="777" />
+		</zip>
+
+		<mkdir dir="${jenkins_release.dir}/${newReleaseNumber}" />
+		<copy file="${release.package.dir.zip}" todir="${jenkins_release.dir}/${newReleaseNumber}" verbose="true" preservelastmodified="true" overwrite="true" />
+
+	</target>
+
+	<target name="prepare.deployments">
+
+		<if>
+			<available file="${deploy_dir}" type="dir" />
+			<then>
+				<delete dir="${build}" />
+				<echo message=" Release directory unzipped already and No Need to unzip it again for the deployment." />
+			</then>
+			<else>
+				<echo message=" Unzipping the relase package ${deploy_dir}.zip...." />
+				<unzip src="${deploy_dir}.zip" dest="${env.LEDR_RELEASE_REPO}\\${env.ReleaseNumber}" overwrite="true" />
+			</else>
+		</if>
+
+	</target>
+
+	<!-- ######### DYNAMICALLY CREATE A SUBFOLDER WITH ENVIRONMENT TARGETS ######## -->
+
+	<target name="deployTalendJobs">
+		<foreach target="extractTalendJobs" param="eachFile">
+			<fileset dir="${basedir}/Talend/TalendJobs/LEDR" casesensitive="no"  includes="*.zip"/>
+		</foreach>
+	</target>
+
+	<!-- ============================================================================ -->
+	<!-- Deploys Talend Jobs to STs.-->
+	<!-- ============================================================================ -->
+
+	<target name="deployTalendJobsFromTeamStreamToST" depends="env-params" >
+
+		<property name="talend.deploy.path" location="${system.lib.dir}/build/talendDeployment"/>
+
+		<path id="class.path">
+			<pathelement location="${talend.deploy.path}"/>
+			<pathelement location="${talend.deploy.path}/ojdbc6.jar"/>
+			<pathelement location="${talend.deploy.path}/commons-net-3.3.jar"/>
+			<pathelement location="${talend.deploy.path}/json-20140107.jar"/>
+		</path>
+
+		<javac srcdir="${talend.deploy.path}"
+			 destdir="${talend.deploy.path}"
+			 debug="on"
+			 source="1.6"
+			 classpathref="class.path"
+			 failonerror="true"
+		/>
+
+		<java fork="true" classname="org.uk.ons.ledr.TalendJobDeploy" classpathref="class.path" failonerror="true">
+			<arg value="${jdbc.db.url}"/>
+			<arg value="LEDR_${env.envDir}_DATA"/>
+			<arg value="LEDR_${env.envDir}"/>
+			<arg value="${env.envDir}"/>
+			<arg value="${tac.url}"/>
+			<arg value="${tac.user}"/>
+			<arg value="${tac.password}"/>
+			<arg value="${jobserver}"/>
+		</java>
+
+		<java fork="true" classname="org.uk.ons.ledr.TalendJobDeploy" classpathref="class.path" failonerror="true">
+			<arg value="${jdbc.db.url}"/>
+			<arg value="LEDR_${env.envDir}_DM"/>
+			<arg value="LEDR_${env.envDir}"/>
+			<arg value="${env.envDir}"/>
+			<arg value="${tac.url}"/>
+			<arg value="${tac.user}"/>
+			<arg value="${tac.password}"/>
+			<arg value="${jobserver}"/>
+		</java>
+	</target>
+
+	<target name="deployTalendMigrationJobs">
+		<foreach target="extractTalendJobs" param="eachFile">
+			<fileset dir="${basedir}/Talend/TalendJobs/Migration" casesensitive="no"  includes="*.zip"/>
+		</foreach>
+	</target>
+
+	<target name="extractTalendJobs">
+		<echo message=" Unzipping the relase package ${eachFile}...." />
+		<basename file="${eachFile}" property="basename" suffix=".zip"/>
+		<echo message="${basename}" />
+		<echo message="Copying talend job to E:/ExportTalendJobs/${env.envDir}" />
+		<unzip src="${eachFile}" dest="E:/ExportTalendJobs/${env.envDir}/${basename}" overwrite="true" />
+		<replaceregexp file="E:/ExportTalendJobs/${env.envDir}/${basename}/${basename}/${basename}_run.bat" match="-DenvDir=(\w+)?" replace="-DenvDir=${env.envDir}" flags="g"/>
+	</target>
+
+	<!-- ######### DEVELOPER TARGETS ######## -->
+
+	<target name="getTalendJobs">
+		<foreach target="unzipTalendJobsDev" param="eachFile">
+			<fileset dir="${basedir}/Talend/TalendJobs/LEDR" casesensitive="no"  includes="*.zip"/>
+		</foreach>
+	</target>
+
+	<target name="getTalendDMJobs">
+		<foreach target="unzipTalendJobsDev" param="eachFile">
+			<fileset dir="${basedir}/Talend/TalendJobs/Migration" casesensitive="no"  includes="*.zip"/>
+		</foreach>
+	</target>
+
+	<target name="unzipTalendJobsDev">
+		<echo message=" Unzipping the relase package ${eachFile}...." />
+		<basename file="${eachFile}" property="basename" suffix=".zip"/>
+		<echo message="${basename}" />
+		<unzip src="${eachFile}" dest="D:/TalendExport/${basename}" overwrite="true" />
+	</target>
+
+	<target name="deployUI" description="Deploys (and redeploys) the LEDR UI.">
+		<if>
+			<not>
+				<isset property="weblogic.name"/>
+			</not>
+			<then>
+				<property name="weblogic.name" value="lerp"/>
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="weblogic.url"/>
+			</not>
+			<then>
+				<property name="weblogic.url" value="t3://localhost:7050"/>
+			</then>
+		</if>
+		<wldeploy
+			action="deploy"
+			source="../LEDR_Source/Business/ear/target/lerp.ear"
+			name="${weblogic.name}"
+			user="weblogic"
+			password="welcome1"
+			adminurl="${weblogic.url}"
+			debug="true"
+			failonerror="true"
+			verbose="true"
+			timeout="500"
+			upload="true"
+			remote="false"/>
+	</target>
+
+	<target name="deployTalendWS" description="Deploys (and redeploys) ">
+		<if>
+			<not>
+				<isset property="weblogic.name"/>
+			</not>
+			<then>
+				<property name="weblogic.name" value="j710_ResolveIssues"/>
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="weblogic.url"/>
+			</not>
+			<then>
+				<property name="weblogic.url" value="t3://localhost:7050"/>
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="weblogic.targets"/>
+			</not>
+			<then>
+				<property name="weblogic.targets" value="AdminServer"/>
+			</then>
+		</if>
+
+		<wldeploy
+			action="deploy"
+			source="../LEDR_Source/Talend/TalendWS/j710_ResolveIssues.war"
+			name="${weblogic.name}"
+			user="weblogic"
+			password="welcome1"
+			adminurl="${weblogic.url}"
+			debug="true"
+			failonerror="true"
+			verbose="true"
+			timeout="500"
+			upload="true"
+			remote="false"
+			targets="${weblogic.targets}"/>
+	</target>
+
+	<!-- ============================================================= -->
+	<!-- Clear the achive and archive-fail directories       -->
+	<!-- ============================================================= -->
+	<target name="calc_path">
+		<if>
+			<not>
+				<isset property="env.envDir"/>
+			</not>
+			<then>
+				<property name="ad_path" value="ledr"/>
+			</then>
+			<else>
+				<property name="ad_path" value="${env.envDir}/ledr"/>
+			</else>
+		</if>
+	</target>
+
+	<target name="wipe_archive" description="">
+		<antcallback target="calc_path" return="ad_path"/>
+
+		<echo message="Deleting archive and archive_fail in ${u01_dir}/talendjobs/${ad_path}"/>
+
+		<delete>
+			<fileset dir="${u01_dir}/talendjobs/${ad_path}/archive/" includes="**/*.zip"/>
+			<fileset dir="${u01_dir}/talendjobs/${ad_path}/archive_fail/" includes="**/*.zip"/>
+		</delete>
+	</target>
+
+    <target name="deployTalendJobsST">
+
+        <echo message="jdbc.db.url = ${jdbc.db.url}"/>
+
+		<property name="talend.deploy.path" location="./System/build/talendDeployment"/>
+		<property name="db.schema.for.talend.jobs" value="${db.schema}_DATA"/>
+		<property name="dm.schema.for.talend.jobs" value="${db.schema}_DM"/>
+
+		<path id="class.path">
+				<pathelement location="${talend.deploy.path}"/>
+				<pathelement location="${talend.deploy.path}/ojdbc6.jar"/>
+				<pathelement location="${talend.deploy.path}/commons-net-3.3.jar"/>
+				<pathelement location="${talend.deploy.path}/json-20140107.jar"/>
+		</path>
+
+		<echo message="talend.deploy.path: ${talend.deploy.path}" />
+
+		<javac srcdir="${talend.deploy.path}"
+		         destdir="${talend.deploy.path}"
+		         debug="on"
+		         source="1.6"
+		         classpathref="class.path"
+		         failonerror="true"
+		/>
+
+		<java fork="true" classname="org.uk.ons.ledr.TalendJobDeploy" classpathref="class.path" failonerror="true">
+			<arg value="${jdbc.db.url}"/>
+			<arg value="${db.schema.for.talend.jobs}"/>
+			<arg value="${datadb.password}"/>
+			<arg value="${Environment}"/>
+			<arg value="${tac.url}"/>
+			<arg value="${tac.user}"/>
+			<arg value="${tac.password}"/>
+			<arg value="${jobserver}"/>
+		</java>
+ 		<java fork="true" classname="org.uk.ons.ledr.TalendJobDeploy" classpathref="class.path" failonerror="true">
+			<arg value="${jdbc.db.url}"/>
+			<arg value="${dm.schema.for.talend.jobs}"/>
+			<arg value="${dmdb.password}"/>
+			<arg value="${Environment}"/>
+			<arg value="${tac.url}"/>
+			<arg value="${tac.user}"/>
+			<arg value="${tac.password}"/>
+			<arg value="${jobserver}"/>
+		</java>
+   </target>
+
+</project>
