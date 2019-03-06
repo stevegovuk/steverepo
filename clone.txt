@@ -1,0 +1,21 @@
+Microsoft Windows [Version 6.1.7601]
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+D:\GitFolder>setenv
+
+D:\GitFolder>md Course
+
+D:\GitFolder>cd Course
+
+D:\GitFolder\Course>md kubernetes
+
+D:\GitFolder\Course>cd kubernetes
+
+D:\GitFolder\Course\kubernetes>git clone https://github.com/stevegovuk/onse-lab-intro-to-kubernetes.git
+Cloning into 'onse-lab-intro-to-kubernetes'...
+fatal: unable to access 'https://github.com/stevegovuk/onse-lab-intro-to-kubernetes.git/': Couldn't resolve host 'github
+.com'
+
+D:\GitFolder\Course\kubernetes>d:\Programs\Git\git-bash.exe
+
+D:\GitFolder\Course\kubernetes>
