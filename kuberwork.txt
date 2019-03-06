@@ -1,0 +1,1768 @@
+Microsoft Windows [Version 10.0.17763.316]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\Users\User12>cd Code\day-2
+
+C:\Users\User12\Code\day-2>docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+
+C:\Users\User12\Code\day-2>docker login
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: stevegovuk
+Password:
+Login Succeeded
+
+C:\Users\User12\Code\day-2>cd onse-lab-intro-to-kubernetes
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>docker build -f Dockerfile -t stevegovuk/onse-lab-intro-to-kubernetes:0.0.1 .
+Sending build context to Docker daemon  26.62kB
+Step 1/13 : FROM ubuntu:16.04
+16.04: Pulling from library/ubuntu
+7b722c1070cd: Pull complete
+5fbf74db61f1: Pull complete
+ed41cb72e5c9: Pull complete
+7ea47a67709e: Pull complete
+Digest: sha256:e4a134999bea4abb4a27bc437e6118fdddfb172e1b9d683129b74d254af51675
+Status: Downloaded newer image for ubuntu:16.04
+ ---> 7e87e2b3bf7a
+Step 2/13 : ENV APP_ROOT=/opt/hello_world
+ ---> Running in b5e7ab318fa3
+Removing intermediate container b5e7ab318fa3
+ ---> 44b37ec2a8ad
+Step 3/13 : RUN apt-get update && apt-get install -y   apt-utils   build-essential   language-pack-en   lsof   net-tools   python   python-pip   vim
+ ---> Running in b5f31384ec13
+Get:1 http://archive.ubuntu.com/ubuntu xenial InRelease [247 kB]
+Get:2 http://security.ubuntu.com/ubuntu xenial-security InRelease [109 kB]
+Get:3 http://archive.ubuntu.com/ubuntu xenial-updates InRelease [109 kB]
+Get:4 http://archive.ubuntu.com/ubuntu xenial-backports InRelease [107 kB]
+Get:5 http://security.ubuntu.com/ubuntu xenial-security/main amd64 Packages [789 kB]
+Get:6 http://archive.ubuntu.com/ubuntu xenial/main amd64 Packages [1558 kB]
+Get:7 http://security.ubuntu.com/ubuntu xenial-security/restricted amd64 Packages [12.7 kB]
+Get:8 http://security.ubuntu.com/ubuntu xenial-security/universe amd64 Packages [543 kB]
+Get:9 http://security.ubuntu.com/ubuntu xenial-security/multiverse amd64 Packages [6116 B]
+Get:10 http://archive.ubuntu.com/ubuntu xenial/restricted amd64 Packages [14.1 kB]
+Get:11 http://archive.ubuntu.com/ubuntu xenial/universe amd64 Packages [9827 kB]
+Get:12 http://archive.ubuntu.com/ubuntu xenial/multiverse amd64 Packages [176 kB]
+Get:13 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 Packages [1183 kB]
+Get:14 http://archive.ubuntu.com/ubuntu xenial-updates/restricted amd64 Packages [13.1 kB]
+Get:15 http://archive.ubuntu.com/ubuntu xenial-updates/universe amd64 Packages [947 kB]
+Get:16 http://archive.ubuntu.com/ubuntu xenial-updates/multiverse amd64 Packages [19.1 kB]
+Get:17 http://archive.ubuntu.com/ubuntu xenial-backports/main amd64 Packages [7942 B]
+Get:18 http://archive.ubuntu.com/ubuntu xenial-backports/universe amd64 Packages [8532 B]
+Fetched 15.7 MB in 4s (3176 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  binutils bzip2 ca-certificates cpp cpp-5 dpkg-dev fakeroot file g++ g++-5
+  gcc gcc-5 ifupdown iproute2 isc-dhcp-client isc-dhcp-common
+  language-pack-en-base libalgorithm-diff-perl libalgorithm-diff-xs-perl
+  libalgorithm-merge-perl libapt-inst2.0 libasan2 libatm1 libatomic1
+  libc-dev-bin libc6 libc6-dev libcc1-0 libcilkrts5 libdns-export162
+  libdpkg-perl libexpat1 libexpat1-dev libfakeroot libffi6
+  libfile-fcntllock-perl libgcc-5-dev libgdbm3 libgmp10 libgomp1 libgpm2
+  libisc-export160 libisl15 libitm1 liblsan0 libmagic1 libmnl0 libmpc3
+  libmpdec2 libmpfr4 libmpx0 libperl5.22 libpython-all-dev libpython-dev
+  libpython-stdlib libpython2.7 libpython2.7-dev libpython2.7-minimal
+  libpython2.7-stdlib libpython3.5 libpython3.5-minimal libpython3.5-stdlib
+  libquadmath0 libsqlite3-0 libssl1.0.0 libstdc++-5-dev libtsan0 libubsan0
+  libxtables11 linux-libc-dev locales make manpages manpages-dev mime-support
+  netbase openssl patch perl perl-modules-5.22 python-all python-all-dev
+  python-dev python-minimal python-pip-whl python-pkg-resources
+  python-setuptools python-wheel python2.7 python2.7-dev python2.7-minimal
+  rename vim-common vim-runtime xz-utils
+Suggested packages:
+  binutils-doc bzip2-doc cpp-doc gcc-5-locales debian-keyring g++-multilib
+  g++-5-multilib gcc-5-doc libstdc++6-5-dbg gcc-multilib autoconf automake
+  libtool flex bison gdb gcc-doc gcc-5-multilib libgcc1-dbg libgomp1-dbg
+  libitm1-dbg libatomic1-dbg libasan2-dbg liblsan0-dbg libtsan0-dbg
+  libubsan0-dbg libcilkrts5-dbg libmpx0-dbg libquadmath0-dbg ppp rdnssd
+  iproute2-doc resolvconf avahi-autoipd isc-dhcp-client-ddns apparmor
+  glibc-doc gpm libstdc++-5-doc make-doc man-browser ed diffutils-doc perl-doc
+  libterm-readline-gnu-perl | libterm-readline-perl-perl python-doc python-tk
+  python-setuptools-doc python2.7-doc binfmt-support ctags vim-doc vim-scripts
+  vim-gnome-py2 | vim-gtk-py2 | vim-gtk3-py2 | vim-athena-py2 | vim-nox-py2
+The following NEW packages will be installed:
+  apt-utils binutils build-essential bzip2 ca-certificates cpp cpp-5 dpkg-dev
+  fakeroot file g++ g++-5 gcc gcc-5 ifupdown iproute2 isc-dhcp-client
+  isc-dhcp-common language-pack-en language-pack-en-base
+  libalgorithm-diff-perl libalgorithm-diff-xs-perl libalgorithm-merge-perl
+  libapt-inst2.0 libasan2 libatm1 libatomic1 libc-dev-bin libc6-dev libcc1-0
+  libcilkrts5 libdns-export162 libdpkg-perl libexpat1 libexpat1-dev
+  libfakeroot libffi6 libfile-fcntllock-perl libgcc-5-dev libgdbm3 libgmp10
+  libgomp1 libgpm2 libisc-export160 libisl15 libitm1 liblsan0 libmagic1
+  libmnl0 libmpc3 libmpdec2 libmpfr4 libmpx0 libperl5.22 libpython-all-dev
+  libpython-dev libpython-stdlib libpython2.7 libpython2.7-dev
+  libpython2.7-minimal libpython2.7-stdlib libpython3.5 libpython3.5-minimal
+  libpython3.5-stdlib libquadmath0 libsqlite3-0 libssl1.0.0 libstdc++-5-dev
+  libtsan0 libubsan0 libxtables11 linux-libc-dev locales lsof make manpages
+  manpages-dev mime-support net-tools netbase openssl patch perl
+  perl-modules-5.22 python python-all python-all-dev python-dev python-minimal
+  python-pip python-pip-whl python-pkg-resources python-setuptools
+  python-wheel python2.7 python2.7-dev python2.7-minimal rename vim vim-common
+  vim-runtime xz-utils
+The following packages will be upgraded:
+  libc6
+1 upgraded, 102 newly installed, 0 to remove and 8 not upgraded.
+Need to get 103 MB of archives.
+After this operation, 339 MB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libc6 amd64 2.23-0ubuntu11 [2577 kB]
+Get:2 http://archive.ubuntu.com/ubuntu xenial/main amd64 libatm1 amd64 1:2.5.1-1.5 [24.2 kB]
+Get:3 http://archive.ubuntu.com/ubuntu xenial/main amd64 libmnl0 amd64 1.0.3-5 [12.0 kB]
+Get:4 http://archive.ubuntu.com/ubuntu xenial/main amd64 libgdbm3 amd64 1.8.3-13.1 [16.9 kB]
+Get:5 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 locales all 2.23-0ubuntu11 [3196 kB]
+Get:6 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 language-pack-en-base all 1:16.04+20160627 [451 kB]
+Get:7 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 language-pack-en all 1:16.04+20161009 [145 kB]
+Get:8 http://archive.ubuntu.com/ubuntu xenial/main amd64 libgpm2 amd64 1.20.4-6.1 [16.5 kB]
+Get:9 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 perl-modules-5.22 all 5.22.1-9ubuntu0.6 [2629 kB]
+Get:10 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libperl5.22 amd64 5.22.1-9ubuntu0.6 [3405 kB]
+Get:11 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 perl amd64 5.22.1-9ubuntu0.6 [237 kB]
+Get:12 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libpython2.7-minimal amd64 2.7.12-1ubuntu0~16.04.4 [339 kB]
+Get:13 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 python2.7-minimal amd64 2.7.12-1ubuntu0~16.04.4 [1261 kB]
+Get:14 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 python-minimal amd64 2.7.12-1~16.04 [28.1 kB]
+Get:15 http://archive.ubuntu.com/ubuntu xenial/main amd64 mime-support all 3.59ubuntu1 [31.0 kB]
+Get:16 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libexpat1 amd64 2.1.0-7ubuntu0.16.04.3 [71.2 kB]
+Get:17 http://archive.ubuntu.com/ubuntu xenial/main amd64 libffi6 amd64 3.2.1-4 [17.8 kB]
+Get:18 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libsqlite3-0 amd64 3.11.0-1ubuntu1.1 [396 kB]
+Get:19 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libssl1.0.0 amd64 1.0.2g-1ubuntu4.15 [1084 kB]
+Get:20 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libpython2.7-stdlib amd64 2.7.12-1ubuntu0~16.04.4 [1880 kB]
+Get:21 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 python2.7 amd64 2.7.12-1ubuntu0~16.04.4 [224 kB]
+Get:22 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libpython-stdlib amd64 2.7.12-1~16.04 [7768 B]
+Get:23 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 python amd64 2.7.12-1~16.04 [137 kB]
+Get:24 http://archive.ubuntu.com/ubuntu xenial/main amd64 libgmp10 amd64 2:6.1.0+dfsg-2 [240 kB]
+Get:25 http://archive.ubuntu.com/ubuntu xenial/main amd64 libmpfr4 amd64 3.1.4-1 [191 kB]
+Get:26 http://archive.ubuntu.com/ubuntu xenial/main amd64 libmpc3 amd64 1.0.3-1 [39.7 kB]
+Get:27 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libapt-inst2.0 amd64 1.2.29ubuntu0.1 [55.4 kB]
+Get:28 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 apt-utils amd64 1.2.29ubuntu0.1 [197 kB]
+Get:29 http://archive.ubuntu.com/ubuntu xenial/main amd64 bzip2 amd64 1.0.6-8 [32.7 kB]
+Get:30 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libmagic1 amd64 1:5.25-2ubuntu1.1 [216 kB]
+Get:31 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 file amd64 1:5.25-2ubuntu1.1 [21.2 kB]
+Get:32 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 iproute2 amd64 4.3.0-1ubuntu3.16.04.4 [521 kB]
+Get:33 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 ifupdown amd64 0.8.10ubuntu1.4 [54.9 kB]
+Get:34 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libisc-export160 amd64 1:9.10.3.dfsg.P4-8ubuntu1.12 [153 kB]
+Get:35 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libdns-export162 amd64 1:9.10.3.dfsg.P4-8ubuntu1.12 [666 kB]
+Get:36 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 isc-dhcp-client amd64 4.3.3-5ubuntu12.10 [224 kB]
+Get:37 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 isc-dhcp-common amd64 4.3.3-5ubuntu12.10 [105 kB]
+Get:38 http://archive.ubuntu.com/ubuntu xenial/main amd64 libmpdec2 amd64 2.4.2-1 [82.6 kB]
+Get:39 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libpython3.5-minimal amd64 3.5.2-2ubuntu0~16.04.5 [524 kB]
+Get:40 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libpython3.5-stdlib amd64 3.5.2-2ubuntu0~16.04.5 [2134 kB]
+Get:41 http://archive.ubuntu.com/ubuntu xenial/main amd64 libxtables11 amd64 1.6.0-2ubuntu3 [27.2 kB]
+Get:42 http://archive.ubuntu.com/ubuntu xenial/main amd64 net-tools amd64 1.60-26ubuntu1 [175 kB]
+Get:43 http://archive.ubuntu.com/ubuntu xenial/main amd64 netbase all 5.3 [12.9 kB]
+Get:44 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 vim-common amd64 2:7.4.1689-3ubuntu1.2 [103 kB]
+Get:45 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 openssl amd64 1.0.2g-1ubuntu4.15 [492 kB]
+Get:46 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 ca-certificates all 20170717~16.04.2 [167 kB]
+Get:47 http://archive.ubuntu.com/ubuntu xenial/main amd64 lsof amd64 4.89+dfsg-0.1 [248 kB]
+Get:48 http://archive.ubuntu.com/ubuntu xenial/main amd64 manpages all 4.04-2 [1087 kB]
+Get:49 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 binutils amd64 2.26.1-1ubuntu1~16.04.8 [2312 kB]
+Get:50 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libc-dev-bin amd64 2.23-0ubuntu11 [68.5 kB]
+Get:51 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 linux-libc-dev amd64 4.4.0-142.168 [867 kB]
+Get:52 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libc6-dev amd64 2.23-0ubuntu11 [2086 kB]
+Get:53 http://archive.ubuntu.com/ubuntu xenial/main amd64 libisl15 amd64 0.16.1-1 [524 kB]
+Get:54 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 cpp-5 amd64 5.4.0-6ubuntu1~16.04.11 [7660 kB]
+Get:55 http://archive.ubuntu.com/ubuntu xenial/main amd64 cpp amd64 4:5.3.1-1ubuntu1 [27.7 kB]
+Get:56 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libcc1-0 amd64 5.4.0-6ubuntu1~16.04.11 [38.8 kB]
+Get:57 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libgomp1 amd64 5.4.0-6ubuntu1~16.04.11 [55.0 kB]
+Get:58 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libitm1 amd64 5.4.0-6ubuntu1~16.04.11 [27.4 kB]
+Get:59 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libatomic1 amd64 5.4.0-6ubuntu1~16.04.11 [8896 B]
+Get:60 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libasan2 amd64 5.4.0-6ubuntu1~16.04.11 [264 kB]
+Get:61 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 liblsan0 amd64 5.4.0-6ubuntu1~16.04.11 [105 kB]
+Get:62 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libtsan0 amd64 5.4.0-6ubuntu1~16.04.11 [244 kB]
+Get:63 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libubsan0 amd64 5.4.0-6ubuntu1~16.04.11 [95.4 kB]
+Get:64 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libcilkrts5 amd64 5.4.0-6ubuntu1~16.04.11 [40.1 kB]
+Get:65 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libmpx0 amd64 5.4.0-6ubuntu1~16.04.11 [9748 B]
+Get:66 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libquadmath0 amd64 5.4.0-6ubuntu1~16.04.11 [131 kB]
+Get:67 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libgcc-5-dev amd64 5.4.0-6ubuntu1~16.04.11 [2229 kB]
+Get:68 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 gcc-5 amd64 5.4.0-6ubuntu1~16.04.11 [8417 kB]
+Get:69 http://archive.ubuntu.com/ubuntu xenial/main amd64 gcc amd64 4:5.3.1-1ubuntu1 [5244 B]
+Get:70 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libstdc++-5-dev amd64 5.4.0-6ubuntu1~16.04.11 [1426 kB]
+Get:71 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 g++-5 amd64 5.4.0-6ubuntu1~16.04.11 [8310 kB]
+Get:72 http://archive.ubuntu.com/ubuntu xenial/main amd64 g++ amd64 4:5.3.1-1ubuntu1 [1504 B]
+Get:73 http://archive.ubuntu.com/ubuntu xenial/main amd64 make amd64 4.1-6 [151 kB]
+Get:74 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libdpkg-perl all 1.18.4ubuntu1.5 [195 kB]
+Get:75 http://archive.ubuntu.com/ubuntu xenial/main amd64 xz-utils amd64 5.1.1alpha+20120614-2ubuntu2 [78.8 kB]
+Get:76 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 patch amd64 2.7.5-1ubuntu0.16.04.1 [90.5 kB]
+Get:77 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 dpkg-dev all 1.18.4ubuntu1.5 [584 kB]
+Get:78 http://archive.ubuntu.com/ubuntu xenial/main amd64 build-essential amd64 12.1ubuntu2 [4758 B]
+Get:79 http://archive.ubuntu.com/ubuntu xenial/main amd64 libfakeroot amd64 1.20.2-1ubuntu1 [25.5 kB]
+Get:80 http://archive.ubuntu.com/ubuntu xenial/main amd64 fakeroot amd64 1.20.2-1ubuntu1 [61.8 kB]
+Get:81 http://archive.ubuntu.com/ubuntu xenial/main amd64 libalgorithm-diff-perl all 1.19.03-1 [47.6 kB]
+Get:82 http://archive.ubuntu.com/ubuntu xenial/main amd64 libalgorithm-diff-xs-perl amd64 0.04-4build1 [11.0 kB]
+Get:83 http://archive.ubuntu.com/ubuntu xenial/main amd64 libalgorithm-merge-perl all 0.08-3 [12.0 kB]
+Get:84 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libexpat1-dev amd64 2.1.0-7ubuntu0.16.04.3 [115 kB]
+Get:85 http://archive.ubuntu.com/ubuntu xenial/main amd64 libfile-fcntllock-perl amd64 0.22-3 [32.0 kB]
+Get:86 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libpython2.7 amd64 2.7.12-1ubuntu0~16.04.4 [1071 kB]
+Get:87 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libpython2.7-dev amd64 2.7.12-1ubuntu0~16.04.4 [27.8 MB]
+Get:88 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libpython-dev amd64 2.7.12-1~16.04 [7840 B]
+Get:89 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libpython-all-dev amd64 2.7.12-1~16.04 [1006 B]
+Get:90 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 libpython3.5 amd64 3.5.2-2ubuntu0~16.04.5 [1360 kB]
+Get:91 http://archive.ubuntu.com/ubuntu xenial/main amd64 manpages-dev all 4.04-2 [2048 kB]
+Get:92 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 python-all amd64 2.7.12-1~16.04 [996 B]
+Get:93 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 python2.7-dev amd64 2.7.12-1ubuntu0~16.04.4 [276 kB]
+Get:94 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 python-dev amd64 2.7.12-1~16.04 [1186 B]
+Get:95 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 python-all-dev amd64 2.7.12-1~16.04 [1016 B]
+Get:96 http://archive.ubuntu.com/ubuntu xenial-updates/universe amd64 python-pip-whl all 8.1.1-2ubuntu0.4 [1110 kB]
+Get:97 http://archive.ubuntu.com/ubuntu xenial-updates/universe amd64 python-pip all 8.1.1-2ubuntu0.4 [144 kB]
+Get:98 http://archive.ubuntu.com/ubuntu xenial/main amd64 python-pkg-resources all 20.7.0-1 [108 kB]
+Get:99 http://archive.ubuntu.com/ubuntu xenial/main amd64 python-setuptools all 20.7.0-1 [169 kB]
+Get:100 http://archive.ubuntu.com/ubuntu xenial/universe amd64 python-wheel all 0.29.0-1 [48.0 kB]
+Get:101 http://archive.ubuntu.com/ubuntu xenial/main amd64 rename all 0.20-4 [12.0 kB]
+Get:102 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 vim-runtime all 2:7.4.1689-3ubuntu1.2 [5164 kB]
+Get:103 http://archive.ubuntu.com/ubuntu xenial-updates/main amd64 vim amd64 2:7.4.1689-3ubuntu1.2 [1036 kB]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 103 MB in 36s (2848 kB/s)
+(Reading database ... 4768 files and directories currently installed.)
+Preparing to unpack .../libc6_2.23-0ubuntu11_amd64.deb ...
+debconf: unable to initialize frontend: Dialog
+debconf: (TERM is not set, so the dialog frontend is not usable.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC contains: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.22.1 /usr/local/share/perl/5.22.1 /usr/lib/x86_64-linux-gnu/perl5/5.22 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl/5.22 /usr/share/perl/5.22 /usr/local/lib/site_perl /usr/lib/x86_64-linux-gnu/perl-base .) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 7.)
+debconf: falling back to frontend: Teletype
+Unpacking libc6:amd64 (2.23-0ubuntu11) over (2.23-0ubuntu10) ...
+Setting up libc6:amd64 (2.23-0ubuntu11) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (TERM is not set, so the dialog frontend is not usable.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC contains: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.22.1 /usr/local/share/perl/5.22.1 /usr/lib/x86_64-linux-gnu/perl5/5.22 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl/5.22 /usr/share/perl/5.22 /usr/local/lib/site_perl /usr/lib/x86_64-linux-gnu/perl-base .) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 7.)
+debconf: falling back to frontend: Teletype
+Processing triggers for libc-bin (2.23-0ubuntu10) ...
+Selecting previously unselected package libatm1:amd64.
+(Reading database ... 4768 files and directories currently installed.)
+Preparing to unpack .../libatm1_1%3a2.5.1-1.5_amd64.deb ...
+Unpacking libatm1:amd64 (1:2.5.1-1.5) ...
+Selecting previously unselected package libmnl0:amd64.
+Preparing to unpack .../libmnl0_1.0.3-5_amd64.deb ...
+Unpacking libmnl0:amd64 (1.0.3-5) ...
+Selecting previously unselected package libgdbm3:amd64.
+Preparing to unpack .../libgdbm3_1.8.3-13.1_amd64.deb ...
+Unpacking libgdbm3:amd64 (1.8.3-13.1) ...
+Selecting previously unselected package locales.
+Preparing to unpack .../locales_2.23-0ubuntu11_all.deb ...
+Unpacking locales (2.23-0ubuntu11) ...
+Selecting previously unselected package language-pack-en-base.
+Preparing to unpack .../language-pack-en-base_1%3a16.04+20160627_all.deb ...
+Unpacking language-pack-en-base (1:16.04+20160627) ...
+Selecting previously unselected package language-pack-en.
+Preparing to unpack .../language-pack-en_1%3a16.04+20161009_all.deb ...
+Unpacking language-pack-en (1:16.04+20161009) ...
+Replacing files in old package language-pack-en-base (1:16.04+20160627) ...
+Selecting previously unselected package libgpm2:amd64.
+Preparing to unpack .../libgpm2_1.20.4-6.1_amd64.deb ...
+Unpacking libgpm2:amd64 (1.20.4-6.1) ...
+Selecting previously unselected package perl-modules-5.22.
+Preparing to unpack .../perl-modules-5.22_5.22.1-9ubuntu0.6_all.deb ...
+Unpacking perl-modules-5.22 (5.22.1-9ubuntu0.6) ...
+Selecting previously unselected package libperl5.22:amd64.
+Preparing to unpack .../libperl5.22_5.22.1-9ubuntu0.6_amd64.deb ...
+Unpacking libperl5.22:amd64 (5.22.1-9ubuntu0.6) ...
+Selecting previously unselected package perl.
+Preparing to unpack .../perl_5.22.1-9ubuntu0.6_amd64.deb ...
+Unpacking perl (5.22.1-9ubuntu0.6) ...
+Selecting previously unselected package libpython2.7-minimal:amd64.
+Preparing to unpack .../libpython2.7-minimal_2.7.12-1ubuntu0~16.04.4_amd64.deb ...
+Unpacking libpython2.7-minimal:amd64 (2.7.12-1ubuntu0~16.04.4) ...
+Selecting previously unselected package python2.7-minimal.
+Preparing to unpack .../python2.7-minimal_2.7.12-1ubuntu0~16.04.4_amd64.deb ...
+Unpacking python2.7-minimal (2.7.12-1ubuntu0~16.04.4) ...
+Selecting previously unselected package python-minimal.
+Preparing to unpack .../python-minimal_2.7.12-1~16.04_amd64.deb ...
+Unpacking python-minimal (2.7.12-1~16.04) ...
+Selecting previously unselected package mime-support.
+Preparing to unpack .../mime-support_3.59ubuntu1_all.deb ...
+Unpacking mime-support (3.59ubuntu1) ...
+Selecting previously unselected package libexpat1:amd64.
+Preparing to unpack .../libexpat1_2.1.0-7ubuntu0.16.04.3_amd64.deb ...
+Unpacking libexpat1:amd64 (2.1.0-7ubuntu0.16.04.3) ...
+Selecting previously unselected package libffi6:amd64.
+Preparing to unpack .../libffi6_3.2.1-4_amd64.deb ...
+Unpacking libffi6:amd64 (3.2.1-4) ...
+Selecting previously unselected package libsqlite3-0:amd64.
+Preparing to unpack .../libsqlite3-0_3.11.0-1ubuntu1.1_amd64.deb ...
+Unpacking libsqlite3-0:amd64 (3.11.0-1ubuntu1.1) ...
+Selecting previously unselected package libssl1.0.0:amd64.
+Preparing to unpack .../libssl1.0.0_1.0.2g-1ubuntu4.15_amd64.deb ...
+Unpacking libssl1.0.0:amd64 (1.0.2g-1ubuntu4.15) ...
+Selecting previously unselected package libpython2.7-stdlib:amd64.
+Preparing to unpack .../libpython2.7-stdlib_2.7.12-1ubuntu0~16.04.4_amd64.deb ...
+Unpacking libpython2.7-stdlib:amd64 (2.7.12-1ubuntu0~16.04.4) ...
+Selecting previously unselected package python2.7.
+Preparing to unpack .../python2.7_2.7.12-1ubuntu0~16.04.4_amd64.deb ...
+Unpacking python2.7 (2.7.12-1ubuntu0~16.04.4) ...
+Selecting previously unselected package libpython-stdlib:amd64.
+Preparing to unpack .../libpython-stdlib_2.7.12-1~16.04_amd64.deb ...
+Unpacking libpython-stdlib:amd64 (2.7.12-1~16.04) ...
+Processing triggers for libc-bin (2.23-0ubuntu10) ...
+Setting up libpython2.7-minimal:amd64 (2.7.12-1ubuntu0~16.04.4) ...
+Setting up python2.7-minimal (2.7.12-1ubuntu0~16.04.4) ...
+Linking and byte-compiling packages for runtime python2.7...
+Setting up python-minimal (2.7.12-1~16.04) ...
+Selecting previously unselected package python.
+(Reading database ... 8606 files and directories currently installed.)
+Preparing to unpack .../python_2.7.12-1~16.04_amd64.deb ...
+Unpacking python (2.7.12-1~16.04) ...
+Selecting previously unselected package libgmp10:amd64.
+Preparing to unpack .../libgmp10_2%3a6.1.0+dfsg-2_amd64.deb ...
+Unpacking libgmp10:amd64 (2:6.1.0+dfsg-2) ...
+Selecting previously unselected package libmpfr4:amd64.
+Preparing to unpack .../libmpfr4_3.1.4-1_amd64.deb ...
+Unpacking libmpfr4:amd64 (3.1.4-1) ...
+Selecting previously unselected package libmpc3:amd64.
+Preparing to unpack .../libmpc3_1.0.3-1_amd64.deb ...
+Unpacking libmpc3:amd64 (1.0.3-1) ...
+Selecting previously unselected package libapt-inst2.0:amd64.
+Preparing to unpack .../libapt-inst2.0_1.2.29ubuntu0.1_amd64.deb ...
+Unpacking libapt-inst2.0:amd64 (1.2.29ubuntu0.1) ...
+Selecting previously unselected package apt-utils.
+Preparing to unpack .../apt-utils_1.2.29ubuntu0.1_amd64.deb ...
+Unpacking apt-utils (1.2.29ubuntu0.1) ...
+Selecting previously unselected package bzip2.
+Preparing to unpack .../bzip2_1.0.6-8_amd64.deb ...
+Unpacking bzip2 (1.0.6-8) ...
+Selecting previously unselected package libmagic1:amd64.
+Preparing to unpack .../libmagic1_1%3a5.25-2ubuntu1.1_amd64.deb ...
+Unpacking libmagic1:amd64 (1:5.25-2ubuntu1.1) ...
+Selecting previously unselected package file.
+Preparing to unpack .../file_1%3a5.25-2ubuntu1.1_amd64.deb ...
+Unpacking file (1:5.25-2ubuntu1.1) ...
+Selecting previously unselected package iproute2.
+Preparing to unpack .../iproute2_4.3.0-1ubuntu3.16.04.4_amd64.deb ...
+Unpacking iproute2 (4.3.0-1ubuntu3.16.04.4) ...
+Selecting previously unselected package ifupdown.
+Preparing to unpack .../ifupdown_0.8.10ubuntu1.4_amd64.deb ...
+Unpacking ifupdown (0.8.10ubuntu1.4) ...
+Selecting previously unselected package libisc-export160.
+Preparing to unpack .../libisc-export160_1%3a9.10.3.dfsg.P4-8ubuntu1.12_amd64.deb ...
+Unpacking libisc-export160 (1:9.10.3.dfsg.P4-8ubuntu1.12) ...
+Selecting previously unselected package libdns-export162.
+Preparing to unpack .../libdns-export162_1%3a9.10.3.dfsg.P4-8ubuntu1.12_amd64.deb ...
+Unpacking libdns-export162 (1:9.10.3.dfsg.P4-8ubuntu1.12) ...
+Selecting previously unselected package isc-dhcp-client.
+Preparing to unpack .../isc-dhcp-client_4.3.3-5ubuntu12.10_amd64.deb ...
+Unpacking isc-dhcp-client (4.3.3-5ubuntu12.10) ...
+Selecting previously unselected package isc-dhcp-common.
+Preparing to unpack .../isc-dhcp-common_4.3.3-5ubuntu12.10_amd64.deb ...
+Unpacking isc-dhcp-common (4.3.3-5ubuntu12.10) ...
+Selecting previously unselected package libmpdec2:amd64.
+Preparing to unpack .../libmpdec2_2.4.2-1_amd64.deb ...
+Unpacking libmpdec2:amd64 (2.4.2-1) ...
+Selecting previously unselected package libpython3.5-minimal:amd64.
+Preparing to unpack .../libpython3.5-minimal_3.5.2-2ubuntu0~16.04.5_amd64.deb ...
+Unpacking libpython3.5-minimal:amd64 (3.5.2-2ubuntu0~16.04.5) ...
+Selecting previously unselected package libpython3.5-stdlib:amd64.
+Preparing to unpack .../libpython3.5-stdlib_3.5.2-2ubuntu0~16.04.5_amd64.deb ...
+Unpacking libpython3.5-stdlib:amd64 (3.5.2-2ubuntu0~16.04.5) ...
+Selecting previously unselected package libxtables11:amd64.
+Preparing to unpack .../libxtables11_1.6.0-2ubuntu3_amd64.deb ...
+Unpacking libxtables11:amd64 (1.6.0-2ubuntu3) ...
+Selecting previously unselected package net-tools.
+Preparing to unpack .../net-tools_1.60-26ubuntu1_amd64.deb ...
+Unpacking net-tools (1.60-26ubuntu1) ...
+Selecting previously unselected package netbase.
+Preparing to unpack .../archives/netbase_5.3_all.deb ...
+Unpacking netbase (5.3) ...
+Selecting previously unselected package vim-common.
+Preparing to unpack .../vim-common_2%3a7.4.1689-3ubuntu1.2_amd64.deb ...
+Unpacking vim-common (2:7.4.1689-3ubuntu1.2) ...
+Selecting previously unselected package openssl.
+Preparing to unpack .../openssl_1.0.2g-1ubuntu4.15_amd64.deb ...
+Unpacking openssl (1.0.2g-1ubuntu4.15) ...
+Selecting previously unselected package ca-certificates.
+Preparing to unpack .../ca-certificates_20170717~16.04.2_all.deb ...
+Unpacking ca-certificates (20170717~16.04.2) ...
+Selecting previously unselected package lsof.
+Preparing to unpack .../lsof_4.89+dfsg-0.1_amd64.deb ...
+Unpacking lsof (4.89+dfsg-0.1) ...
+Selecting previously unselected package manpages.
+Preparing to unpack .../manpages_4.04-2_all.deb ...
+Unpacking manpages (4.04-2) ...
+Selecting previously unselected package binutils.
+Preparing to unpack .../binutils_2.26.1-1ubuntu1~16.04.8_amd64.deb ...
+Unpacking binutils (2.26.1-1ubuntu1~16.04.8) ...
+Selecting previously unselected package libc-dev-bin.
+Preparing to unpack .../libc-dev-bin_2.23-0ubuntu11_amd64.deb ...
+Unpacking libc-dev-bin (2.23-0ubuntu11) ...
+Selecting previously unselected package linux-libc-dev:amd64.
+Preparing to unpack .../linux-libc-dev_4.4.0-142.168_amd64.deb ...
+Unpacking linux-libc-dev:amd64 (4.4.0-142.168) ...
+Selecting previously unselected package libc6-dev:amd64.
+Preparing to unpack .../libc6-dev_2.23-0ubuntu11_amd64.deb ...
+Unpacking libc6-dev:amd64 (2.23-0ubuntu11) ...
+Selecting previously unselected package libisl15:amd64.
+Preparing to unpack .../libisl15_0.16.1-1_amd64.deb ...
+Unpacking libisl15:amd64 (0.16.1-1) ...
+Selecting previously unselected package cpp-5.
+Preparing to unpack .../cpp-5_5.4.0-6ubuntu1~16.04.11_amd64.deb ...
+Unpacking cpp-5 (5.4.0-6ubuntu1~16.04.11) ...
+Selecting previously unselected package cpp.
+Preparing to unpack .../cpp_4%3a5.3.1-1ubuntu1_amd64.deb ...
+Unpacking cpp (4:5.3.1-1ubuntu1) ...
+Selecting previously unselected package libcc1-0:amd64.
+Preparing to unpack .../libcc1-0_5.4.0-6ubuntu1~16.04.11_amd64.deb ...
+Unpacking libcc1-0:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Selecting previously unselected package libgomp1:amd64.
+Preparing to unpack .../libgomp1_5.4.0-6ubuntu1~16.04.11_amd64.deb ...
+Unpacking libgomp1:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Selecting previously unselected package libitm1:amd64.
+Preparing to unpack .../libitm1_5.4.0-6ubuntu1~16.04.11_amd64.deb ...
+Unpacking libitm1:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Selecting previously unselected package libatomic1:amd64.
+Preparing to unpack .../libatomic1_5.4.0-6ubuntu1~16.04.11_amd64.deb ...
+Unpacking libatomic1:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Selecting previously unselected package libasan2:amd64.
+Preparing to unpack .../libasan2_5.4.0-6ubuntu1~16.04.11_amd64.deb ...
+Unpacking libasan2:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Selecting previously unselected package liblsan0:amd64.
+Preparing to unpack .../liblsan0_5.4.0-6ubuntu1~16.04.11_amd64.deb ...
+Unpacking liblsan0:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Selecting previously unselected package libtsan0:amd64.
+Preparing to unpack .../libtsan0_5.4.0-6ubuntu1~16.04.11_amd64.deb ...
+Unpacking libtsan0:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Selecting previously unselected package libubsan0:amd64.
+Preparing to unpack .../libubsan0_5.4.0-6ubuntu1~16.04.11_amd64.deb ...
+Unpacking libubsan0:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Selecting previously unselected package libcilkrts5:amd64.
+Preparing to unpack .../libcilkrts5_5.4.0-6ubuntu1~16.04.11_amd64.deb ...
+Unpacking libcilkrts5:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Selecting previously unselected package libmpx0:amd64.
+Preparing to unpack .../libmpx0_5.4.0-6ubuntu1~16.04.11_amd64.deb ...
+Unpacking libmpx0:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Selecting previously unselected package libquadmath0:amd64.
+Preparing to unpack .../libquadmath0_5.4.0-6ubuntu1~16.04.11_amd64.deb ...
+Unpacking libquadmath0:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Selecting previously unselected package libgcc-5-dev:amd64.
+Preparing to unpack .../libgcc-5-dev_5.4.0-6ubuntu1~16.04.11_amd64.deb ...
+Unpacking libgcc-5-dev:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Selecting previously unselected package gcc-5.
+Preparing to unpack .../gcc-5_5.4.0-6ubuntu1~16.04.11_amd64.deb ...
+Unpacking gcc-5 (5.4.0-6ubuntu1~16.04.11) ...
+Selecting previously unselected package gcc.
+Preparing to unpack .../gcc_4%3a5.3.1-1ubuntu1_amd64.deb ...
+Unpacking gcc (4:5.3.1-1ubuntu1) ...
+Selecting previously unselected package libstdc++-5-dev:amd64.
+Preparing to unpack .../libstdc++-5-dev_5.4.0-6ubuntu1~16.04.11_amd64.deb ...
+Unpacking libstdc++-5-dev:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Selecting previously unselected package g++-5.
+Preparing to unpack .../g++-5_5.4.0-6ubuntu1~16.04.11_amd64.deb ...
+Unpacking g++-5 (5.4.0-6ubuntu1~16.04.11) ...
+Selecting previously unselected package g++.
+Preparing to unpack .../g++_4%3a5.3.1-1ubuntu1_amd64.deb ...
+Unpacking g++ (4:5.3.1-1ubuntu1) ...
+Selecting previously unselected package make.
+Preparing to unpack .../archives/make_4.1-6_amd64.deb ...
+Unpacking make (4.1-6) ...
+Selecting previously unselected package libdpkg-perl.
+Preparing to unpack .../libdpkg-perl_1.18.4ubuntu1.5_all.deb ...
+Unpacking libdpkg-perl (1.18.4ubuntu1.5) ...
+Selecting previously unselected package xz-utils.
+Preparing to unpack .../xz-utils_5.1.1alpha+20120614-2ubuntu2_amd64.deb ...
+Unpacking xz-utils (5.1.1alpha+20120614-2ubuntu2) ...
+Selecting previously unselected package patch.
+Preparing to unpack .../patch_2.7.5-1ubuntu0.16.04.1_amd64.deb ...
+Unpacking patch (2.7.5-1ubuntu0.16.04.1) ...
+Selecting previously unselected package dpkg-dev.
+Preparing to unpack .../dpkg-dev_1.18.4ubuntu1.5_all.deb ...
+Unpacking dpkg-dev (1.18.4ubuntu1.5) ...
+Selecting previously unselected package build-essential.
+Preparing to unpack .../build-essential_12.1ubuntu2_amd64.deb ...
+Unpacking build-essential (12.1ubuntu2) ...
+Selecting previously unselected package libfakeroot:amd64.
+Preparing to unpack .../libfakeroot_1.20.2-1ubuntu1_amd64.deb ...
+Unpacking libfakeroot:amd64 (1.20.2-1ubuntu1) ...
+Selecting previously unselected package fakeroot.
+Preparing to unpack .../fakeroot_1.20.2-1ubuntu1_amd64.deb ...
+Unpacking fakeroot (1.20.2-1ubuntu1) ...
+Selecting previously unselected package libalgorithm-diff-perl.
+Preparing to unpack .../libalgorithm-diff-perl_1.19.03-1_all.deb ...
+Unpacking libalgorithm-diff-perl (1.19.03-1) ...
+Selecting previously unselected package libalgorithm-diff-xs-perl.
+Preparing to unpack .../libalgorithm-diff-xs-perl_0.04-4build1_amd64.deb ...
+Unpacking libalgorithm-diff-xs-perl (0.04-4build1) ...
+Selecting previously unselected package libalgorithm-merge-perl.
+Preparing to unpack .../libalgorithm-merge-perl_0.08-3_all.deb ...
+Unpacking libalgorithm-merge-perl (0.08-3) ...
+Selecting previously unselected package libexpat1-dev:amd64.
+Preparing to unpack .../libexpat1-dev_2.1.0-7ubuntu0.16.04.3_amd64.deb ...
+Unpacking libexpat1-dev:amd64 (2.1.0-7ubuntu0.16.04.3) ...
+Selecting previously unselected package libfile-fcntllock-perl.
+Preparing to unpack .../libfile-fcntllock-perl_0.22-3_amd64.deb ...
+Unpacking libfile-fcntllock-perl (0.22-3) ...
+Selecting previously unselected package libpython2.7:amd64.
+Preparing to unpack .../libpython2.7_2.7.12-1ubuntu0~16.04.4_amd64.deb ...
+Unpacking libpython2.7:amd64 (2.7.12-1ubuntu0~16.04.4) ...
+Selecting previously unselected package libpython2.7-dev:amd64.
+Preparing to unpack .../libpython2.7-dev_2.7.12-1ubuntu0~16.04.4_amd64.deb ...
+Unpacking libpython2.7-dev:amd64 (2.7.12-1ubuntu0~16.04.4) ...
+Selecting previously unselected package libpython-dev:amd64.
+Preparing to unpack .../libpython-dev_2.7.12-1~16.04_amd64.deb ...
+Unpacking libpython-dev:amd64 (2.7.12-1~16.04) ...
+Selecting previously unselected package libpython-all-dev:amd64.
+Preparing to unpack .../libpython-all-dev_2.7.12-1~16.04_amd64.deb ...
+Unpacking libpython-all-dev:amd64 (2.7.12-1~16.04) ...
+Selecting previously unselected package libpython3.5:amd64.
+Preparing to unpack .../libpython3.5_3.5.2-2ubuntu0~16.04.5_amd64.deb ...
+Unpacking libpython3.5:amd64 (3.5.2-2ubuntu0~16.04.5) ...
+Selecting previously unselected package manpages-dev.
+Preparing to unpack .../manpages-dev_4.04-2_all.deb ...
+Unpacking manpages-dev (4.04-2) ...
+Selecting previously unselected package python-all.
+Preparing to unpack .../python-all_2.7.12-1~16.04_amd64.deb ...
+Unpacking python-all (2.7.12-1~16.04) ...
+Selecting previously unselected package python2.7-dev.
+Preparing to unpack .../python2.7-dev_2.7.12-1ubuntu0~16.04.4_amd64.deb ...
+Unpacking python2.7-dev (2.7.12-1ubuntu0~16.04.4) ...
+Selecting previously unselected package python-dev.
+Preparing to unpack .../python-dev_2.7.12-1~16.04_amd64.deb ...
+Unpacking python-dev (2.7.12-1~16.04) ...
+Selecting previously unselected package python-all-dev.
+Preparing to unpack .../python-all-dev_2.7.12-1~16.04_amd64.deb ...
+Unpacking python-all-dev (2.7.12-1~16.04) ...
+Selecting previously unselected package python-pip-whl.
+Preparing to unpack .../python-pip-whl_8.1.1-2ubuntu0.4_all.deb ...
+Unpacking python-pip-whl (8.1.1-2ubuntu0.4) ...
+Selecting previously unselected package python-pip.
+Preparing to unpack .../python-pip_8.1.1-2ubuntu0.4_all.deb ...
+Unpacking python-pip (8.1.1-2ubuntu0.4) ...
+Selecting previously unselected package python-pkg-resources.
+Preparing to unpack .../python-pkg-resources_20.7.0-1_all.deb ...
+Unpacking python-pkg-resources (20.7.0-1) ...
+Selecting previously unselected package python-setuptools.
+Preparing to unpack .../python-setuptools_20.7.0-1_all.deb ...
+Unpacking python-setuptools (20.7.0-1) ...
+Selecting previously unselected package python-wheel.
+Preparing to unpack .../python-wheel_0.29.0-1_all.deb ...
+Unpacking python-wheel (0.29.0-1) ...
+Selecting previously unselected package rename.
+Preparing to unpack .../archives/rename_0.20-4_all.deb ...
+Unpacking rename (0.20-4) ...
+Selecting previously unselected package vim-runtime.
+Preparing to unpack .../vim-runtime_2%3a7.4.1689-3ubuntu1.2_all.deb ...
+Adding 'diversion of /usr/share/vim/vim74/doc/help.txt to /usr/share/vim/vim74/doc/help.txt.vim-tiny by vim-runtime'
+Adding 'diversion of /usr/share/vim/vim74/doc/tags to /usr/share/vim/vim74/doc/tags.vim-tiny by vim-runtime'
+Unpacking vim-runtime (2:7.4.1689-3ubuntu1.2) ...
+Selecting previously unselected package vim.
+Preparing to unpack .../vim_2%3a7.4.1689-3ubuntu1.2_amd64.deb ...
+Unpacking vim (2:7.4.1689-3ubuntu1.2) ...
+Processing triggers for libc-bin (2.23-0ubuntu10) ...
+Processing triggers for systemd (229-4ubuntu21.15) ...
+Setting up libatm1:amd64 (1:2.5.1-1.5) ...
+Setting up libmnl0:amd64 (1.0.3-5) ...
+Setting up libgdbm3:amd64 (1.8.3-13.1) ...
+Setting up locales (2.23-0ubuntu11) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (TERM is not set, so the dialog frontend is not usable.)
+debconf: falling back to frontend: Readline
+Generating locales (this might take a while)...
+  en_AG.UTF-8... done
+  en_AU.UTF-8... done
+  en_BW.UTF-8... done
+  en_CA.UTF-8... done
+  en_DK.UTF-8... done
+  en_GB.UTF-8... done
+  en_HK.UTF-8... done
+  en_IE.UTF-8... done
+  en_IN.UTF-8... done
+  en_NG.UTF-8... done
+  en_NZ.UTF-8... done
+  en_PH.UTF-8... done
+  en_SG.UTF-8... done
+  en_US.UTF-8... done
+  en_ZA.UTF-8... done
+  en_ZM.UTF-8... done
+  en_ZW.UTF-8... done
+Generation complete.
+Setting up libgpm2:amd64 (1.20.4-6.1) ...
+Setting up perl-modules-5.22 (5.22.1-9ubuntu0.6) ...
+Setting up libperl5.22:amd64 (5.22.1-9ubuntu0.6) ...
+Setting up perl (5.22.1-9ubuntu0.6) ...
+update-alternatives: using /usr/bin/prename to provide /usr/bin/rename (rename) in auto mode
+Setting up mime-support (3.59ubuntu1) ...
+Setting up libexpat1:amd64 (2.1.0-7ubuntu0.16.04.3) ...
+Setting up libffi6:amd64 (3.2.1-4) ...
+Setting up libsqlite3-0:amd64 (3.11.0-1ubuntu1.1) ...
+Setting up libssl1.0.0:amd64 (1.0.2g-1ubuntu4.15) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (TERM is not set, so the dialog frontend is not usable.)
+debconf: falling back to frontend: Readline
+Setting up libpython2.7-stdlib:amd64 (2.7.12-1ubuntu0~16.04.4) ...
+Setting up python2.7 (2.7.12-1ubuntu0~16.04.4) ...
+Setting up libpython-stdlib:amd64 (2.7.12-1~16.04) ...
+Setting up python (2.7.12-1~16.04) ...
+Setting up libgmp10:amd64 (2:6.1.0+dfsg-2) ...
+Setting up libmpfr4:amd64 (3.1.4-1) ...
+Setting up libmpc3:amd64 (1.0.3-1) ...
+Setting up libapt-inst2.0:amd64 (1.2.29ubuntu0.1) ...
+Setting up apt-utils (1.2.29ubuntu0.1) ...
+Setting up bzip2 (1.0.6-8) ...
+Setting up libmagic1:amd64 (1:5.25-2ubuntu1.1) ...
+Setting up file (1:5.25-2ubuntu1.1) ...
+Setting up iproute2 (4.3.0-1ubuntu3.16.04.4) ...
+Setting up ifupdown (0.8.10ubuntu1.4) ...
+Creating /etc/network/interfaces.
+Setting up libisc-export160 (1:9.10.3.dfsg.P4-8ubuntu1.12) ...
+Setting up libdns-export162 (1:9.10.3.dfsg.P4-8ubuntu1.12) ...
+Setting up isc-dhcp-client (4.3.3-5ubuntu12.10) ...
+Setting up isc-dhcp-common (4.3.3-5ubuntu12.10) ...
+Setting up libmpdec2:amd64 (2.4.2-1) ...
+Setting up libpython3.5-minimal:amd64 (3.5.2-2ubuntu0~16.04.5) ...
+Setting up libpython3.5-stdlib:amd64 (3.5.2-2ubuntu0~16.04.5) ...
+Setting up libxtables11:amd64 (1.6.0-2ubuntu3) ...
+Setting up net-tools (1.60-26ubuntu1) ...
+Setting up netbase (5.3) ...
+Setting up vim-common (2:7.4.1689-3ubuntu1.2) ...
+Setting up openssl (1.0.2g-1ubuntu4.15) ...
+Setting up ca-certificates (20170717~16.04.2) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (TERM is not set, so the dialog frontend is not usable.)
+debconf: falling back to frontend: Readline
+Setting up lsof (4.89+dfsg-0.1) ...
+Setting up manpages (4.04-2) ...
+Setting up binutils (2.26.1-1ubuntu1~16.04.8) ...
+Setting up libc-dev-bin (2.23-0ubuntu11) ...
+Setting up linux-libc-dev:amd64 (4.4.0-142.168) ...
+Setting up libc6-dev:amd64 (2.23-0ubuntu11) ...
+Setting up libisl15:amd64 (0.16.1-1) ...
+Setting up cpp-5 (5.4.0-6ubuntu1~16.04.11) ...
+Setting up cpp (4:5.3.1-1ubuntu1) ...
+Setting up libcc1-0:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Setting up libgomp1:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Setting up libitm1:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Setting up libatomic1:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Setting up libasan2:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Setting up liblsan0:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Setting up libtsan0:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Setting up libubsan0:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Setting up libcilkrts5:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Setting up libmpx0:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Setting up libquadmath0:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Setting up libgcc-5-dev:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Setting up gcc-5 (5.4.0-6ubuntu1~16.04.11) ...
+Setting up gcc (4:5.3.1-1ubuntu1) ...
+Setting up libstdc++-5-dev:amd64 (5.4.0-6ubuntu1~16.04.11) ...
+Setting up g++-5 (5.4.0-6ubuntu1~16.04.11) ...
+Setting up g++ (4:5.3.1-1ubuntu1) ...
+update-alternatives: using /usr/bin/g++ to provide /usr/bin/c++ (c++) in auto mode
+Setting up make (4.1-6) ...
+Setting up libdpkg-perl (1.18.4ubuntu1.5) ...
+Setting up xz-utils (5.1.1alpha+20120614-2ubuntu2) ...
+update-alternatives: using /usr/bin/xz to provide /usr/bin/lzma (lzma) in auto mode
+Setting up patch (2.7.5-1ubuntu0.16.04.1) ...
+Setting up dpkg-dev (1.18.4ubuntu1.5) ...
+Setting up build-essential (12.1ubuntu2) ...
+Setting up libfakeroot:amd64 (1.20.2-1ubuntu1) ...
+Setting up fakeroot (1.20.2-1ubuntu1) ...
+update-alternatives: using /usr/bin/fakeroot-sysv to provide /usr/bin/fakeroot (fakeroot) in auto mode
+Setting up libalgorithm-diff-perl (1.19.03-1) ...
+Setting up libalgorithm-diff-xs-perl (0.04-4build1) ...
+Setting up libalgorithm-merge-perl (0.08-3) ...
+Setting up libexpat1-dev:amd64 (2.1.0-7ubuntu0.16.04.3) ...
+Setting up libfile-fcntllock-perl (0.22-3) ...
+Setting up libpython2.7:amd64 (2.7.12-1ubuntu0~16.04.4) ...
+Setting up libpython2.7-dev:amd64 (2.7.12-1ubuntu0~16.04.4) ...
+Setting up libpython-dev:amd64 (2.7.12-1~16.04) ...
+Setting up libpython-all-dev:amd64 (2.7.12-1~16.04) ...
+Setting up libpython3.5:amd64 (3.5.2-2ubuntu0~16.04.5) ...
+Setting up manpages-dev (4.04-2) ...
+Setting up python-all (2.7.12-1~16.04) ...
+Setting up python2.7-dev (2.7.12-1ubuntu0~16.04.4) ...
+Setting up python-dev (2.7.12-1~16.04) ...
+Setting up python-all-dev (2.7.12-1~16.04) ...
+Setting up python-pip-whl (8.1.1-2ubuntu0.4) ...
+Setting up python-pip (8.1.1-2ubuntu0.4) ...
+Setting up python-pkg-resources (20.7.0-1) ...
+Setting up python-setuptools (20.7.0-1) ...
+Setting up python-wheel (0.29.0-1) ...
+Setting up rename (0.20-4) ...
+update-alternatives: using /usr/bin/file-rename to provide /usr/bin/rename (rename) in auto mode
+Setting up vim-runtime (2:7.4.1689-3ubuntu1.2) ...
+Setting up vim (2:7.4.1689-3ubuntu1.2) ...
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/vim (vim) in auto mode
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/vimdiff (vimdiff) in auto mode
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/rvim (rvim) in auto mode
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/rview (rview) in auto mode
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/vi (vi) in auto mode
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/view (view) in auto mode
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/ex (ex) in auto mode
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/editor (editor) in auto mode
+Setting up language-pack-en (1:16.04+20161009) ...
+Setting up language-pack-en-base (1:16.04+20160627) ...
+Generating locales (this might take a while)...
+Generation complete.
+Processing triggers for libc-bin (2.23-0ubuntu10) ...
+Processing triggers for systemd (229-4ubuntu21.15) ...
+Processing triggers for ca-certificates (20170717~16.04.2) ...
+Updating certificates in /etc/ssl/certs...
+148 added, 0 removed; done.
+Running hooks in /etc/ca-certificates/update.d...
+done.
+Removing intermediate container b5f31384ec13
+ ---> 2e0031423057
+Step 4/13 : ENV LANG=en_GB.UTF-8
+ ---> Running in 43a515b93d5c
+Removing intermediate container 43a515b93d5c
+ ---> daac1853eb63
+Step 5/13 : ENV LANGUAGE=en_GB.UTF-8
+ ---> Running in bbb70c686d28
+Removing intermediate container bbb70c686d28
+ ---> 11f71a453b43
+Step 6/13 : ENV LC_ALL=en_GB.UTF-8
+ ---> Running in 8f1f58b5e29a
+Removing intermediate container 8f1f58b5e29a
+ ---> 2f8801334cfd
+Step 7/13 : RUN pip install --upgrade pip
+ ---> Running in dd5c7c98f585
+Collecting pip
+  Downloading https://files.pythonhosted.org/packages/d8/f3/413bab4ff08e1fc4828dfc59996d721917df8e8583ea85385d51125dceff/pip-19.0.3-py2.py3-none-any.whl (1.4MB)
+Installing collected packages: pip
+  Found existing installation: pip 8.1.1
+    Not uninstalling pip at /usr/lib/python2.7/dist-packages, outside environment /usr
+Successfully installed pip-19.0.3
+Removing intermediate container dd5c7c98f585
+ ---> e99b9188b2d3
+Step 8/13 : RUN pip install pipenv
+ ---> Running in 6887f7942418
+DEPRECATION: Python 2.7 will reach the end of its life on January 1st, 2020. Please upgrade your Python as Python 2.7 won't be maintained after that date. A future version of pip will drop support for Python 2.7.
+Collecting pipenv
+  Downloading https://files.pythonhosted.org/packages/bb/15/b155a5c0d19ce41609f50bb70a37e0de092b453ec4bd2eac59e53a2c3227/pipenv-2018.11.26-py2-none-any.whl (5.2MB)
+Collecting enum34; python_version < "3" (from pipenv)
+  Downloading https://files.pythonhosted.org/packages/c5/db/e56e6b4bbac7c4a06de1c50de6fe1ef3810018ae11732a50f15f62c7d050/enum34-1.1.6-py2-none-any.whl
+Collecting certifi (from pipenv)
+  Downloading https://files.pythonhosted.org/packages/9f/e0/accfc1b56b57e9750eba272e24c4dddeac86852c2bebd1236674d7887e8a/certifi-2018.11.29-py2.py3-none-any.whl (154kB)
+Collecting typing; python_version < "3.5" (from pipenv)
+  Downloading https://files.pythonhosted.org/packages/cc/3e/29f92b7aeda5b078c86d14f550bf85cff809042e3429ace7af6193c3bc9f/typing-3.6.6-py2-none-any.whl
+Collecting virtualenv (from pipenv)
+  Downloading https://files.pythonhosted.org/packages/33/5d/314c760d4204f64e4a968275182b7751bd5c3249094757b39ba987dcfb5a/virtualenv-16.4.3-py2.py3-none-any.whl (2.0MB)
+Collecting setuptools>=36.2.1 (from pipenv)
+  Downloading https://files.pythonhosted.org/packages/d1/6a/4b2fcefd2ea0868810e92d519dacac1ddc64a2e53ba9e3422c3b62b378a6/setuptools-40.8.0-py2.py3-none-any.whl (575kB)
+Collecting virtualenv-clone>=0.2.5 (from pipenv)
+  Downloading https://files.pythonhosted.org/packages/e3/d9/d9c56deb483c4d3289a00b12046e41428be64e8236fa210111a1f57cc42d/virtualenv_clone-0.5.1-py2.py3-none-any.whl
+Requirement already satisfied: pip>=9.0.1 in /usr/local/lib/python2.7/dist-packages (from pipenv) (19.0.3)
+Installing collected packages: enum34, certifi, typing, virtualenv, setuptools, virtualenv-clone, pipenv
+  Found existing installation: setuptools 20.7.0
+    Uninstalling setuptools-20.7.0:
+      Successfully uninstalled setuptools-20.7.0
+Successfully installed certifi-2018.11.29 enum34-1.1.6 pipenv-2018.11.26 setuptools-40.8.0 typing-3.6.6 virtualenv-16.4.3 virtualenv-clone-0.5.1
+Removing intermediate container 6887f7942418
+ ---> a69da7b6a2a7
+Step 9/13 : RUN mkdir $APP_ROOT
+ ---> Running in 9bd762def34c
+Removing intermediate container 9bd762def34c
+ ---> a5f9e2c109c2
+Step 10/13 : WORKDIR $APP_ROOT
+ ---> Running in 206fa6373a69
+Removing intermediate container 206fa6373a69
+ ---> 3fb823c5ebff
+Step 11/13 : COPY . $APP_ROOT
+ ---> 472a69d7fc84
+Step 12/13 : RUN pipenv install --system
+ ---> Running in 731e3c26482f
+Installing dependencies from Pipfile.lock (7e480d)...
+Removing intermediate container 731e3c26482f
+ ---> 87c7f8b21304
+Step 13/13 : CMD pipenv run scripts/docker-start.sh
+ ---> Running in 335f276b7ed9
+Removing intermediate container 335f276b7ed9
+ ---> 24b9105886b0
+Successfully built 24b9105886b0
+Successfully tagged stevegovuk/onse-lab-intro-to-kubernetes:0.0.1
+SECURITY WARNING: You are building a Docker image from Windows against a non-Windows Docker host. All files and directories added to build context will have '-rwxr-xr-x' permissions. It is recommended to double check and reset permissions for sensitive files and directories.
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>docker run -d -p 5000:5000 --name intro-to-kubernetes stevegovuk/onse-lab-intro-to-kubernetes:0.0.1
+1cf9b21aca65c0b811da6e666250edf883653aa6ff7157844c1ad61c9bfd48e4
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>docker stop intro-to-kubernetes
+intro-to-kubernetes
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>docker rm intro-to-kubernetes
+intro-to-kubernetes
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>docker push stevegovuk/onse-lab-intro-to-kubernetes:0.0.1
+The push refers to repository [docker.io/stevegovuk/onse-lab-intro-to-kubernetes]
+3a559ecda0e1: Pushed
+da5dd3d2154b: Pushed
+a47069c81fbc: Pushed
+37ca894ec80f: Pushed
+5dd4bc321f74: Pushed
+36987e949752: Pushed
+68dda0c9a8cd: Mounted from library/ubuntu
+f67191ae09b8: Mounted from library/ubuntu
+b2fd8b4c3da7: Mounted from library/ubuntu
+0de2edf7bff4: Mounted from library/ubuntu
+0.0.1: digest: sha256:d4a7ba893f03f8f8f32fee3b761333bbd29d207057ee1b8a0da48fc574c258c6 size: 2412
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl config view
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: REDACTED
+    server: https://B5BA8D47C18F3E33DBCA879C226E4FA7.sk1.eu-west-1.eks.amazonaws.com
+  name: kubernetes
+contexts:
+- context:
+    cluster: kubernetes
+    user: aws
+  name: aws
+current-context: aws
+kind: Config
+preferences: {}
+users:
+- name: aws
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1alpha1
+      args:
+      - token
+      - -i
+      - eks-cluster
+      command: aws-iam-authenticator
+      env: null
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl get namespaces
+NAME          STATUS    AGE
+default       Active    43d
+emma-davies   Active    6d
+glanvl        Active    5d
+howelj        Active    5d
+jenkins       Active    43d
+kube-public   Active    43d
+kube-system   Active    43d
+luke-glan     Active    6d
+nigandjim     Active    6d
+nigelbond     Active    6d
+rhigriff      Active    7d
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl create namespace stevegovuk
+namespace "stevegovuk" created
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl get namespaces
+NAME              STATUS    AGE
+default           Active    43d
+emma-davies       Active    6d
+glanvl            Active    5d
+howelj            Active    5d
+jenkins           Active    43d
+kube-public       Active    43d
+kube-system       Active    43d
+luke-glan         Active    6d
+narinderandjohn   Active    4m
+nigandjim         Active    6d
+nigelbond         Active    6d
+rhigriff          Active    7d
+stevegovuk        Active    4s
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl apply -n stevegovuk -f kubernetes\deployment.yml
+deployment.apps "frontend" created
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl apply -n stevegovuk -f kubernetes\service.yml
+service "kubernetes-intro" created
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS    RESTARTS   AGE
+frontend-557478dc69-f4w48   1/1       Running   0          46s
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get deployments
+NAME       DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+frontend   1         1         1            1           1m
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk describe service kubernetes-intro
+Name:                     kubernetes-intro
+Namespace:                stevegovuk
+Labels:                   app=kubernetes-intro
+Annotations:              kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"kubernetes-intro"},"name":"kubernetes-intro","namespace":"stevegovuk"...
+Selector:                 app=kubernetes-intro,tier=frontend
+Type:                     LoadBalancer
+IP:                       172.20.225.171
+LoadBalancer Ingress:     aba377c7a3f5b11e98eba06b8e503471-643662622.eu-west-1.elb.amazonaws.com
+Port:                     <unset>  5000/TCP
+TargetPort:               5000/TCP
+NodePort:                 <unset>  30890/TCP
+Endpoints:                10.0.1.84:5000
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:
+  Type    Reason                Age   From                Message
+  ----    ------                ----  ----                -------
+  Normal  EnsuringLoadBalancer  2m    service-controller  Ensuring load balancer
+  Normal  EnsuredLoadBalancer   2m    service-controller  Ensured load balancer
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk set env deployment/frontend RECIPIENT='steve jan adrian'
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal 0xc0000005 code=0x0 addr=0x168 pc=0x66537d]
+
+goroutine 1 [running]:
+k8s.io/kubernetes/vendor/github.com/spf13/cobra.(*Command).HasParent(...)
+        /workspace/anago-v1.10.11-beta.0.1+637c7e288581ee/src/k8s.io/kubernetes/_output/dockerized/go/src/k8s.io/kubernetes/vendor/github.com/spf13/cobra/command.go:1268
+k8s.io/kubernetes/vendor/github.com/spf13/cobra.(*Command).CommandPath(0x0, 0x3e, 0xc0425edbe8)
+        /workspace/anago-v1.10.11-beta.0.1+637c7e288581ee/src/k8s.io/kubernetes/_output/dockerized/go/src/k8s.io/kubernetes/vendor/github.com/spf13/cobra/command.go:1066 +0x2d
+k8s.io/kubernetes/pkg/kubectl/cmd/util.UsageErrorf(0x0, 0x1902c13, 0x3e, 0xc0425edbe8, 0x1, 0x1, 0x30, 0x0)
+        /workspace/anago-v1.10.11-beta.0.1+637c7e288581ee/src/k8s.io/kubernetes/_output/dockerized/go/src/k8s.io/kubernetes/pkg/kubectl/cmd/util/helpers.go:296 +0x95
+k8s.io/kubernetes/pkg/kubectl/cmd/set.(*EnvOptions).Complete(0xc04204d540, 0x242fc00, 0xc0425db590, 0xc0427f9400, 0xc0428a6de0, 0x4, 0x6, 0x669c30, 0xc0425edc50)
+        /workspace/anago-v1.10.11-beta.0.1+637c7e288581ee/src/k8s.io/kubernetes/_output/dockerized/go/src/k8s.io/kubernetes/pkg/kubectl/cmd/set/set_env.go:182 +0x804
+k8s.io/kubernetes/pkg/kubectl/cmd/set.NewCmdEnv.func1(0xc0427f9400, 0xc0428a6de0, 0x4, 0x6)
+        /workspace/anago-v1.10.11-beta.0.1+637c7e288581ee/src/k8s.io/kubernetes/_output/dockerized/go/src/k8s.io/kubernetes/pkg/kubectl/cmd/set/set_env.go:140 +0x84
+k8s.io/kubernetes/vendor/github.com/spf13/cobra.(*Command).execute(0xc0427f9400, 0xc0428a6d20, 0x6, 0x6, 0xc0427f9400, 0xc0428a6d20)
+        /workspace/anago-v1.10.11-beta.0.1+637c7e288581ee/src/k8s.io/kubernetes/_output/dockerized/go/src/k8s.io/kubernetes/vendor/github.com/spf13/cobra/command.go:757 +0x2c8
+k8s.io/kubernetes/vendor/github.com/spf13/cobra.(*Command).ExecuteC(0xc0423df400, 0xc0425eded8, 0xc0425edee0, 0x12a05f200)
+        /workspace/anago-v1.10.11-beta.0.1+637c7e288581ee/src/k8s.io/kubernetes/_output/dockerized/go/src/k8s.io/kubernetes/vendor/github.com/spf13/cobra/command.go:843 +0x33b
+k8s.io/kubernetes/vendor/github.com/spf13/cobra.(*Command).Execute(0xc0423df400, 0x19671b0, 0x25cfbc0)
+        /workspace/anago-v1.10.11-beta.0.1+637c7e288581ee/src/k8s.io/kubernetes/_output/dockerized/go/src/k8s.io/kubernetes/vendor/github.com/spf13/cobra/command.go:791 +0x32
+main.main()
+        /workspace/anago-v1.10.11-beta.0.1+637c7e288581ee/src/k8s.io/kubernetes/_output/dockerized/go/src/k8s.io/kubernetes/cmd/kubectl/kubectl.go:50 +0x19d
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk set env deployment/frontend RECIPIENT='stevejanadrian'
+deployment.apps "frontend" env updated
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>env
+'env' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>set r
+Environment variable r not defined
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>set
+ALLUSERSPROFILE=C:\ProgramData
+APPDATA=C:\Users\User12\AppData\Roaming
+AWS_ACCESS_KEY_ID=AKIAIIHT3QDKEMA6NHSQ
+AWS_SECRET_ACCESS_KEY=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
+ChocolateyInstall=C:\ProgramData\chocolatey
+CommonProgramFiles=C:\Program Files\Common Files
+CommonProgramFiles(x86)=C:\Program Files (x86)\Common Files
+CommonProgramW6432=C:\Program Files\Common Files
+COMPUTERNAME=DESKTOP-2I86IDA
+ComSpec=C:\Windows\system32\cmd.exe
+DriverData=C:\Windows\System32\Drivers\DriverData
+FPS_BROWSER_APP_PROFILE_STRING=Internet Explorer
+FPS_BROWSER_USER_PROFILE_STRING=Default
+HOMEDRIVE=C:
+HOMEPATH=\Users\User12
+LOCALAPPDATA=C:\Users\User12\AppData\Local
+LOGONSERVER=\\DESKTOP-2I86IDA
+NUMBER_OF_PROCESSORS=4
+OneDrive=C:\Users\User12\OneDrive
+OS=Windows_NT
+Path=C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\Docker\Docker\Resources\bin;C:\Python37\Scripts\;C:\Python37\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Program Files\Microsoft VS Code\bin;C:\Users\User12\AppData\Local\Microsoft\WindowsApps;
+PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW
+PROCESSOR_ARCHITECTURE=AMD64
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 78 Stepping 3, GenuineIntel
+PROCESSOR_LEVEL=6
+PROCESSOR_REVISION=4e03
+ProgramData=C:\ProgramData
+ProgramFiles=C:\Program Files
+ProgramFiles(x86)=C:\Program Files (x86)
+ProgramW6432=C:\Program Files
+PROMPT=$P$G
+PSModulePath=C:\Program Files\WindowsPowerShell\Modules;C:\Windows\system32\WindowsPowerShell\v1.0\Modules
+PUBLIC=C:\Users\Public
+SESSIONNAME=Console
+SystemDrive=C:
+SystemRoot=C:\Windows
+TEMP=C:\Users\User12\AppData\Local\Temp
+TMP=C:\Users\User12\AppData\Local\Temp
+USERDOMAIN=DESKTOP-2I86IDA
+USERDOMAIN_ROAMINGPROFILE=DESKTOP-2I86IDA
+USERNAME=User12
+USERPROFILE=C:\Users\User12
+windir=C:\Windows
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>docker build -f Dockerfile -t stevegovuk/onse-lab-intro-to-kubernetes:0.0.2 .
+Sending build context to Docker daemon  26.62kB
+Step 1/13 : FROM ubuntu:16.04
+ ---> 7e87e2b3bf7a
+Step 2/13 : ENV APP_ROOT=/opt/hello_world
+ ---> Using cache
+ ---> 44b37ec2a8ad
+Step 3/13 : RUN apt-get update && apt-get install -y   apt-utils   build-essential   language-pack-en   lsof   net-tools   python   python-pip   vim
+ ---> Using cache
+ ---> 2e0031423057
+Step 4/13 : ENV LANG=en_GB.UTF-8
+ ---> Using cache
+ ---> daac1853eb63
+Step 5/13 : ENV LANGUAGE=en_GB.UTF-8
+ ---> Using cache
+ ---> 11f71a453b43
+Step 6/13 : ENV LC_ALL=en_GB.UTF-8
+ ---> Using cache
+ ---> 2f8801334cfd
+Step 7/13 : RUN pip install --upgrade pip
+ ---> Using cache
+ ---> e99b9188b2d3
+Step 8/13 : RUN pip install pipenv
+ ---> Using cache
+ ---> a69da7b6a2a7
+Step 9/13 : RUN mkdir $APP_ROOT
+ ---> Using cache
+ ---> a5f9e2c109c2
+Step 10/13 : WORKDIR $APP_ROOT
+ ---> Using cache
+ ---> 3fb823c5ebff
+Step 11/13 : COPY . $APP_ROOT
+ ---> bf4329940d6d
+Step 12/13 : RUN pipenv install --system
+ ---> Running in 6602dc1616e1
+Installing dependencies from Pipfile.lock (7e480d)...
+Removing intermediate container 6602dc1616e1
+ ---> e76c8568f255
+Step 13/13 : CMD pipenv run scripts/docker-start.sh
+ ---> Running in 0f7bef8d0098
+Removing intermediate container 0f7bef8d0098
+ ---> 29eda95d62ba
+Successfully built 29eda95d62ba
+Successfully tagged stevegovuk/onse-lab-intro-to-kubernetes:0.0.2
+SECURITY WARNING: You are building a Docker image from Windows against a non-Windows Docker host. All files and directories added to build context will have '-rwxr-xr-x' permissions. It is recommended to double check and reset permissions for sensitive files and directories.
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>docker run -d -p 5000:5000 stevegovuk/onse-lab-intro-to-kubernetes:0.0.2
+226f6f3d3a026c6de2d829dce797814e46c8a5d268a9c0521e3894d26df8ed8c
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>docker push stevegovuk/onse-lab-intro-to-kubernetes:0.0.2
+The push refers to repository [docker.io/stevegovuk/onse-lab-intro-to-kubernetes]
+a139ebe27e8f: Pushed
+650fcd5f8ecb: Pushed
+a47069c81fbc: Layer already exists
+37ca894ec80f: Layer already exists
+5dd4bc321f74: Layer already exists
+36987e949752: Layer already exists
+68dda0c9a8cd: Layer already exists
+f67191ae09b8: Layer already exists
+b2fd8b4c3da7: Layer already exists
+0de2edf7bff4: Layer already exists
+0.0.2: digest: sha256:21549039122f528120565d4bab1580669630adcb46e496aeee06b3c9e531d74b size: 2412
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk set image deployment/frontend kubernetes-intro-web=stevegovuk/onse-lab-intro-to-kubernetes:0.0.2
+deployment.apps "frontend" image updated
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk scale --replicas=3 deployment frontend
+deployment.extensions "frontend" scaled
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS              RESTARTS   AGE
+frontend-5948b55749-pfsb5   1/1       Running             0          19s
+frontend-5948b55749-pss66   0/1       ContainerCreating   0          19s
+frontend-5948b55749-v924g   1/1       Running             0          17h
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS    RESTARTS   AGE
+frontend-5948b55749-pfsb5   1/1       Running   0          30s
+frontend-5948b55749-pss66   1/1       Running   0          30s
+frontend-5948b55749-v924g   1/1       Running   0          17h
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk scale --replicas=1 deployment frontend
+deployment.extensions "frontend" scaled
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS        RESTARTS   AGE
+frontend-5948b55749-pfsb5   1/1       Terminating   0          1m
+frontend-5948b55749-pss66   1/1       Terminating   0          1m
+frontend-5948b55749-v924g   1/1       Running       0          17h
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS        RESTARTS   AGE
+frontend-5948b55749-pfsb5   1/1       Terminating   0          1m
+frontend-5948b55749-pss66   1/1       Terminating   0          1m
+frontend-5948b55749-v924g   1/1       Running       0          17h
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS        RESTARTS   AGE
+frontend-5948b55749-pfsb5   1/1       Terminating   0          1m
+frontend-5948b55749-pss66   1/1       Terminating   0          1m
+frontend-5948b55749-v924g   1/1       Running       0          17h
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS        RESTARTS   AGE
+frontend-5948b55749-pfsb5   1/1       Terminating   0          1m
+frontend-5948b55749-pss66   1/1       Terminating   0          1m
+frontend-5948b55749-v924g   1/1       Running       0          17h
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS        RESTARTS   AGE
+frontend-5948b55749-pfsb5   0/1       Terminating   0          1m
+frontend-5948b55749-v924g   1/1       Running       0          17h
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS        RESTARTS   AGE
+frontend-5948b55749-pfsb5   0/1       Terminating   0          1m
+frontend-5948b55749-v924g   1/1       Running       0          17h
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS    RESTARTS   AGE
+frontend-5948b55749-v924g   1/1       Running   0          17h
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>git add app.py kubernetes\deployment.yml
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>git commit -m 'Update kubernetes manifests and output key'
+error: pathspec 'manifests' did not match any file(s) known to git
+error: pathspec 'and' did not match any file(s) known to git
+error: pathspec 'output' did not match any file(s) known to git
+error: pathspec 'key'' did not match any file(s) known to git
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>git commit -m "Update kubernetes manifests and output key"
+[master 8ecc008] Update kubernetes manifests and output key
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>git push
+remote: Permission to stevegovuk/onse-lab-intro-to-kubernetes.git denied to mfcrocker.
+fatal: unable to access 'https://github.com/stevegovuk/onse-lab-intro-to-kubernetes/': The requested URL returned error: 403
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>git push
+remote: Permission to stevegovuk/onse-lab-intro-to-kubernetes.git denied to mfcrocker.
+fatal: unable to access 'https://github.com/stevegovuk/onse-lab-intro-to-kubernetes/': The requested URL returned error: 403
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>git remote -v
+origin  https://github.com/stevegovuk/onse-lab-intro-to-kubernetes (fetch)
+origin  https://github.com/stevegovuk/onse-lab-intro-to-kubernetes (push)
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>git remote set-url origin git@github.com:stevegovuk/onse-lab-intro-to-kubernetes.git
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>git push
+The authenticity of host 'github.com (140.82.118.3)' can't be established.
+RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'github.com,140.82.118.3' (RSA) to the list of known hosts.
+Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (5/5), done.
+Writing objects: 100% (5/5), 499 bytes | 166.00 KiB/s, done.
+Total 5 (delta 3), reused 0 (delta 0)
+remote: Resolving deltas: 100% (3/3), completed with 3 local objects.
+To github.com:stevegovuk/onse-lab-intro-to-kubernetes.git
+   0a14a50..8ecc008  master -> master
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl get pods
+NAME                               READY     STATUS    RESTARTS   AGE
+traefik-ingress-85c9778d97-tvtpm   1/1       Running   0          5d
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS    RESTARTS   AGE
+frontend-5948b55749-v924g   1/1       Running   0          18h
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl describe pod frontend-5948b55749-v924g
+Error from server (NotFound): pods "frontend-5948b55749-v924g" not found
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl describe -n stevegovuk pod frontend-5948b55749-v924g
+Name:               frontend-5948b55749-v924g
+Namespace:          stevegovuk
+Priority:           0
+PriorityClassName:  <none>
+Node:               ip-10-0-1-58.eu-west-1.compute.internal/10.0.1.58
+Start Time:         Tue, 05 Mar 2019 15:44:11 +0000
+Labels:             app=kubernetes-intro
+                    pod-template-hash=1504611305
+                    tier=frontend
+Annotations:        <none>
+Status:             Running
+IP:                 10.0.1.76
+Controlled By:      ReplicaSet/frontend-5948b55749
+Containers:
+  kubernetes-intro-web:
+    Container ID:   docker://51c0d8308628ad7c74b5db6c237aa043af25ec4508a812406e99a440dbd37506
+    Image:          stevegovuk/onse-lab-intro-to-kubernetes:0.0.2
+    Image ID:       docker-pullable://stevegovuk/onse-lab-intro-to-kubernetes@sha256:21549039122f528120565d4bab1580669630adcb46e496aeee06b3c9e531d74b
+    Port:           5000/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Tue, 05 Mar 2019 15:44:15 +0000
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:     100m
+      memory:  100Mi
+    Environment:
+      RECIPIENT:  'stevejanadrian'
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-rrpdm (ro)
+Conditions:
+  Type           Status
+  Initialized    True
+  Ready          True
+  PodScheduled   True
+Volumes:
+  default-token-rrpdm:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-rrpdm
+    Optional:    false
+QoS Class:       Burstable
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute for 300s
+                 node.kubernetes.io/unreachable:NoExecute for 300s
+Events:          <none>
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl get events
+No resources found.
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl logs -n stevegovuk pod frontend-5948b55749-v924g
+Error from server (NotFound): pods "pod" not found
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl logs -n stevegovuk -f frontend-5948b55749-v924g
+Creating a virtualenv for this project...
+Pipfile: /opt/hello_world/Pipfile
+Using /usr/bin/python (2.7.12) to create virtualenv...
+? Creating virtual environment...Already using interpreter /usr/bin/python
+New python executable in /root/.local/share/virtualenvs/hello_world-AVvKZXOc/bin/python
+Installing setuptools, pip, wheel...
+done.
+
+? Successfully created virtual environment!
+Virtualenv location: /root/.local/share/virtualenvs/hello_world-AVvKZXOc
+ * Environment: production
+   WARNING: Do not use the development server in a production environment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+10.0.0.120 - - [05/Mar/2019 15:44:26] "GET / HTTP/1.1" 200 -
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl exec -n stevegovuk -it frontend-5948b55749-v924g -- ls
+app.py      Jenkinsfile  Pipfile       scripts
+Dockerfile  kubernetes   Pipfile.lock  test_app.py
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl exec -n stevegovuk -it frontend-5948b55749-v924g -- ls -
+la
+total 36
+drwxr-xr-x 1 root root   165 Mar  5 15:42 .
+drwxr-xr-x 1 root root    25 Mar  5 15:16 ..
+-rwxr-xr-x 1 root root   293 Mar  5 15:42 app.py
+-rwxr-xr-x 1 root root   454 Mar  5 15:09 Dockerfile
+-rwxr-xr-x 1 root root    48 Mar  5 15:09 .dockerignore
+-rwxr-xr-x 1 root root  3127 Mar  5 15:09 Jenkinsfile
+drwxr-xr-x 2 root root    47 Mar  5 15:29 kubernetes
+-rwxr-xr-x 1 root root   159 Mar  5 15:09 Pipfile
+-rwxr-xr-x 1 root root 11159 Mar  5 15:09 Pipfile.lock
+drwxr-xr-x 2 root root    29 Mar  5 15:09 scripts
+-rwxr-xr-x 1 root root   274 Mar  5 15:09 test_app.py
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS    RESTARTS   AGE
+frontend-5948b55749-v924g   1/1       Running   0          18h
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>notepad kubernetes\deployment.yml
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl apply -n stevegovuk -f kubernetes\
+deployment.apps "frontend" configured
+service "kubernetes-intro" unchanged
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS         RESTARTS   AGE
+frontend-5948b55749-v924g   1/1       Running        0          18h
+frontend-7bdb587c8d-9972x   0/1       ErrImagePull   0          6s
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>notepad kubernetes\deployment.yml
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl apply -n stevegovuk -f kubernetes\
+deployment.apps "frontend" configured
+service "kubernetes-intro" unchanged
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS        RESTARTS   AGE
+frontend-557478dc69-jt4zm   1/1       Running       0          6s
+frontend-5948b55749-v924g   1/1       Terminating   0          18h
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS        RESTARTS   AGE
+frontend-557478dc69-jt4zm   1/1       Running       0          15s
+frontend-5948b55749-v924g   1/1       Terminating   0          18h
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS        RESTARTS   AGE
+frontend-557478dc69-jt4zm   1/1       Running       0          19s
+frontend-5948b55749-v924g   1/1       Terminating   0          18h
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS        RESTARTS   AGE
+frontend-557478dc69-jt4zm   1/1       Running       0          29s
+frontend-5948b55749-v924g   1/1       Terminating   0          18h
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS    RESTARTS   AGE
+frontend-557478dc69-jt4zm   1/1       Running   0          48s
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>dir
+ Volume in drive C has no label.
+ Volume Serial Number is 1EE8-CE78
+
+ Directory of C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes
+
+05/03/2019  15:42    <DIR>          .
+05/03/2019  15:42    <DIR>          ..
+05/03/2019  15:09                48 .dockerignore
+05/03/2019  15:09                30 .gitignore
+05/03/2019  15:42               293 app.py
+05/03/2019  15:09               454 Dockerfile
+05/03/2019  15:09             3,127 Jenkinsfile
+05/03/2019  15:29    <DIR>          kubernetes
+05/03/2019  15:09               159 Pipfile
+05/03/2019  15:09            11,159 Pipfile.lock
+05/03/2019  15:09                33 README.md
+05/03/2019  15:09    <DIR>          scripts
+05/03/2019  15:09               274 test_app.py
+               9 File(s)         15,577 bytes
+               4 Dir(s)  199,458,824,192 bytes free
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>cd ..
+
+C:\Users\User12\Code\day-2>dir /s /b doc*.*
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes\Dockerfile
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes\.dockerignore
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes\scripts\docker-start.sh
+
+C:\Users\User12\Code\day-2>cd onse-lab-intro-to-kubernetes
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>notepad scripts\docker-start.sh
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>docker build -t stevegovuk/onse-lab-intro-to-kubernetes:0.0.3 .
+Sending build context to Docker daemon  26.62kB
+Step 1/13 : FROM ubuntu:16.04
+ ---> 7e87e2b3bf7a
+Step 2/13 : ENV APP_ROOT=/opt/hello_world
+ ---> Using cache
+ ---> 44b37ec2a8ad
+Step 3/13 : RUN apt-get update && apt-get install -y   apt-utils   build-essential   language-pack-en   lsof   net-tools   python   python-pip   vim
+ ---> Using cache
+ ---> 2e0031423057
+Step 4/13 : ENV LANG=en_GB.UTF-8
+ ---> Using cache
+ ---> daac1853eb63
+Step 5/13 : ENV LANGUAGE=en_GB.UTF-8
+ ---> Using cache
+ ---> 11f71a453b43
+Step 6/13 : ENV LC_ALL=en_GB.UTF-8
+ ---> Using cache
+ ---> 2f8801334cfd
+Step 7/13 : RUN pip install --upgrade pip
+ ---> Using cache
+ ---> e99b9188b2d3
+Step 8/13 : RUN pip install pipenv
+ ---> Using cache
+ ---> a69da7b6a2a7
+Step 9/13 : RUN mkdir $APP_ROOT
+ ---> Using cache
+ ---> a5f9e2c109c2
+Step 10/13 : WORKDIR $APP_ROOT
+ ---> Using cache
+ ---> 3fb823c5ebff
+Step 11/13 : COPY . $APP_ROOT
+ ---> d1ce0aa2e162
+Step 12/13 : RUN pipenv install --system
+ ---> Running in fc5161d873d6
+Installing dependencies from Pipfile.lock (7e480d)...
+Removing intermediate container fc5161d873d6
+ ---> aa8bd0643056
+Step 13/13 : CMD pipenv run scripts/docker-start.sh
+ ---> Running in 742d88203544
+Removing intermediate container 742d88203544
+ ---> 1535be88550b
+Successfully built 1535be88550b
+Successfully tagged stevegovuk/onse-lab-intro-to-kubernetes:0.0.3
+SECURITY WARNING: You are building a Docker image from Windows against a non-Windows Docker host. All files and directories added to build context will have '-rwxr-xr-x' permissions. It is recommended to double check and reset permissions for sensitive files and directories.
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>set DOCKER_ID stevegovuk
+Environment variable DOCKER_ID stevegovuk not defined
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>set DOCKER_ID=stevegovuk
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>echo $DOCKER_ID
+$DOCKER_ID
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>echo %DOCKER_ID%
+stevegovuk
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>docker push %DOCKER_ID%/onse-lab-intro-to-kubernetes:0.0.3
+The push refers to repository [docker.io/stevegovuk/onse-lab-intro-to-kubernetes]
+8ca55521003b: Pushed
+99c06e128337: Pushed
+a47069c81fbc: Layer already exists
+37ca894ec80f: Layer already exists
+5dd4bc321f74: Layer already exists
+36987e949752: Layer already exists
+68dda0c9a8cd: Layer already exists
+f67191ae09b8: Layer already exists
+b2fd8b4c3da7: Layer already exists
+0de2edf7bff4: Layer already exists
+0.0.3: digest: sha256:be29232e56dfec98162f3301f7dc115d5f864361db6cdcf49460894ef1187d81 size: 2412
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk set image deployment/frontend kubernetes-intro-web=%DOCKER_ID%/onse-lab-intro-to-kubernetes:0.0.3
+deployment.apps "frontend" image updated
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS        RESTARTS   AGE
+frontend-557478dc69-jt4zm   1/1       Terminating   0          6m
+frontend-5596dfcb7f-fvvgg   1/1       Running       1          11s
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS        RESTARTS   AGE
+frontend-557478dc69-jt4zm   1/1       Terminating   0          6m
+frontend-5596dfcb7f-fvvgg   0/1       Error         1          20s
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS             RESTARTS   AGE
+frontend-557478dc69-jt4zm   1/1       Terminating        0          6m
+frontend-5596dfcb7f-fvvgg   0/1       CrashLoopBackOff   1          25s
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS        RESTARTS   AGE
+frontend-557478dc69-jt4zm   0/1       Terminating   0          6m
+frontend-5596dfcb7f-fvvgg   0/1       Error         2          35s
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS    RESTARTS   AGE
+frontend-5596dfcb7f-fvvgg   0/1       Error     2          44s
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk describe pod frontend-5596dfcb7f-fvvgg
+Name:               frontend-5596dfcb7f-fvvgg
+Namespace:          stevegovuk
+Priority:           0
+PriorityClassName:  <none>
+Node:               ip-10-0-1-58.eu-west-1.compute.internal/10.0.1.58
+Start Time:         Wed, 06 Mar 2019 10:06:50 +0000
+Labels:             app=kubernetes-intro
+                    pod-template-hash=1152897639
+                    tier=frontend
+Annotations:        <none>
+Status:             Running
+IP:                 10.0.1.53
+Controlled By:      ReplicaSet/frontend-5596dfcb7f
+Containers:
+  kubernetes-intro-web:
+    Container ID:   docker://c2984f34a2bf995ea7ebd021559b947772502b861a6e0a2a4942f11a69afef3c
+    Image:          stevegovuk/onse-lab-intro-to-kubernetes:0.0.3
+    Image ID:       docker-pullable://stevegovuk/onse-lab-intro-to-kubernetes@sha256:be29232e56dfec98162f3301f7dc115d5f864361db6cdcf49460894ef1187d81
+    Port:           5000/TCP
+    Host Port:      0/TCP
+    State:          Terminated
+      Reason:       Error
+      Exit Code:    2
+      Started:      Wed, 06 Mar 2019 10:08:46 +0000
+      Finished:     Wed, 06 Mar 2019 10:08:50 +0000
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    2
+      Started:      Wed, 06 Mar 2019 10:07:50 +0000
+      Finished:     Wed, 06 Mar 2019 10:07:54 +0000
+    Ready:          False
+    Restart Count:  4
+    Requests:
+      cpu:     100m
+      memory:  100Mi
+    Environment:
+      RECIPIENT:  world
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-rrpdm (ro)
+Conditions:
+  Type           Status
+  Initialized    True
+  Ready          False
+  PodScheduled   True
+Volumes:
+  default-token-rrpdm:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-rrpdm
+    Optional:    false
+QoS Class:       Burstable
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute for 300s
+                 node.kubernetes.io/unreachable:NoExecute for 300s
+Events:
+  Type     Reason                 Age               From                                              Message
+  ----     ------                 ----              ----                                              -------
+  Normal   Scheduled              2m                default-scheduler                                 Successfully assigned stevegovuk/frontend-5596dfcb7f-fvvgg to ip-10-0-1-58.eu-west-1.compute.internal
+  Normal   SuccessfulMountVolume  2m                kubelet, ip-10-0-1-58.eu-west-1.compute.internal  MountVolume.SetUp succeeded for volume "default-token-rrpdm"
+  Normal   Pulled                 1m (x4 over 2m)   kubelet, ip-10-0-1-58.eu-west-1.compute.internal  Successfully pulled image "stevegovuk/onse-lab-intro-to-kubernetes:0.0.3"
+  Normal   Created                1m (x4 over 2m)   kubelet, ip-10-0-1-58.eu-west-1.compute.internal  Created container
+  Normal   Started                1m (x4 over 2m)   kubelet, ip-10-0-1-58.eu-west-1.compute.internal  Started container
+  Warning  BackOff                24s (x7 over 1m)  kubelet, ip-10-0-1-58.eu-west-1.compute.internal  Back-off restarting failed container
+  Normal   Pulling                11s (x5 over 2m)  kubelet, ip-10-0-1-58.eu-west-1.compute.internal  pulling image "ste
+vegovuk/onse-lab-intro-to-kubernetes:0.0.3"
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk logs frontend-5596dfcb7f-fvvgg
+Creating a virtualenv for this project...
+Pipfile: /opt/hello_world/Pipfile
+Using /usr/bin/python (2.7.12) to create virtualenv...
+? Creating virtual environment...Already using interpreter /usr/bin/python
+New python executable in /root/.local/share/virtualenvs/hello_world-AVvKZXOc/bin/python
+Installing setuptools, pip, wheel...
+done.
+
+? Successfully created virtual environment!
+Virtualenv location: /root/.local/share/virtualenvs/hello_world-AVvKZXOc
+Usage: flask [OPTIONS] COMMAND [ARGS]...
+Try "flask --help" for help.
+
+Error: No such command "zrun".
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>notepad scripts\docker-start.sh
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>notepad app.py
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>docker build -t %DOCKER_ID%/onse-lab-intro-to-kubernetes:0.0.4 .
+Sending build context to Docker daemon  26.62kB
+Step 1/13 : FROM ubuntu:16.04
+ ---> 7e87e2b3bf7a
+Step 2/13 : ENV APP_ROOT=/opt/hello_world
+ ---> Using cache
+ ---> 44b37ec2a8ad
+Step 3/13 : RUN apt-get update && apt-get install -y   apt-utils   build-essential   language-pack-en   lsof   net-tools   python   python-pip   vim
+ ---> Using cache
+ ---> 2e0031423057
+Step 4/13 : ENV LANG=en_GB.UTF-8
+ ---> Using cache
+ ---> daac1853eb63
+Step 5/13 : ENV LANGUAGE=en_GB.UTF-8
+ ---> Using cache
+ ---> 11f71a453b43
+Step 6/13 : ENV LC_ALL=en_GB.UTF-8
+ ---> Using cache
+ ---> 2f8801334cfd
+Step 7/13 : RUN pip install --upgrade pip
+ ---> Using cache
+ ---> e99b9188b2d3
+Step 8/13 : RUN pip install pipenv
+ ---> Using cache
+ ---> a69da7b6a2a7
+Step 9/13 : RUN mkdir $APP_ROOT
+ ---> Using cache
+ ---> a5f9e2c109c2
+Step 10/13 : WORKDIR $APP_ROOT
+ ---> Using cache
+ ---> 3fb823c5ebff
+Step 11/13 : COPY . $APP_ROOT
+ ---> c0c40562f966
+Step 12/13 : RUN pipenv install --system
+ ---> Running in 153d469bdc62
+Installing dependencies from Pipfile.lock (7e480d)...
+Removing intermediate container 153d469bdc62
+ ---> 9a254b578de2
+Step 13/13 : CMD pipenv run scripts/docker-start.sh
+ ---> Running in 9cc02f91985c
+Removing intermediate container 9cc02f91985c
+ ---> b856fda8d9d9
+Successfully built b856fda8d9d9
+Successfully tagged stevegovuk/onse-lab-intro-to-kubernetes:0.0.4
+SECURITY WARNING: You are building a Docker image from Windows against a non-Windows Docker host. All files and directories added to build context will have '-rwxr-xr-x' permissions. It is recommended to double check and reset permissions for sensitive files and directories.
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>docker push %DOCKER_ID%/onse-lab-intro-to-kubernetes:0.0.4
+The push refers to repository [docker.io/stevegovuk/onse-lab-intro-to-kubernetes]
+187164bf42dd: Pushed
+ff288d86523b: Pushed
+a47069c81fbc: Layer already exists
+37ca894ec80f: Layer already exists
+5dd4bc321f74: Layer already exists
+36987e949752: Layer already exists
+68dda0c9a8cd: Layer already exists
+f67191ae09b8: Layer already exists
+b2fd8b4c3da7: Layer already exists
+0de2edf7bff4: Layer already exists
+0.0.4: digest: sha256:42b9b2ccb238273c3e43420f962daa2a86e41aca13ce46eb01406f255f758bc4 size: 2412
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk set image deployment/frontend kubernetes-intro-web=%DOCKER_ID%/onse-lab-intro-to-kubernetes:0.0.4
+deployment.apps "frontend" image updated
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk get pods
+NAME                        READY     STATUS    RESTARTS   AGE
+frontend-6f6744c6fb-gr8zf   1/1       Running   0          38s
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk describe pod frontend-6f6744c6fb-gr8zf
+Name:               frontend-6f6744c6fb-gr8zf
+Namespace:          stevegovuk
+Priority:           0
+PriorityClassName:  <none>
+Node:               ip-10-0-0-120.eu-west-1.compute.internal/10.0.0.120
+Start Time:         Wed, 06 Mar 2019 10:12:00 +0000
+Labels:             app=kubernetes-intro
+                    pod-template-hash=2923007296
+                    tier=frontend
+Annotations:        <none>
+Status:             Running
+IP:                 10.0.0.31
+Controlled By:      ReplicaSet/frontend-6f6744c6fb
+Containers:
+  kubernetes-intro-web:
+    Container ID:   docker://36d4349aa55db42314e53b5581456ef697b8701329893b696408454888394706
+    Image:          stevegovuk/onse-lab-intro-to-kubernetes:0.0.4
+    Image ID:       docker-pullable://stevegovuk/onse-lab-intro-to-kubernetes@sha256:42b9b2ccb238273c3e43420f962daa2a86e
+41aca13ce46eb01406f255f758bc4
+    Port:           5000/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Wed, 06 Mar 2019 10:12:03 +0000
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:     100m
+      memory:  100Mi
+    Environment:
+      RECIPIENT:  world
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-rrpdm (ro)
+Conditions:
+  Type           Status
+  Initialized    True
+  Ready          True
+  PodScheduled   True
+Volumes:
+  default-token-rrpdm:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-rrpdm
+    Optional:    false
+QoS Class:       Burstable
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute for 300s
+                 node.kubernetes.io/unreachable:NoExecute for 300s
+Events:
+  Type    Reason                 Age   From                                               Message
+  ----    ------                 ----  ----                                               -------
+  Normal  Scheduled              54s   default-scheduler                                  Successfully assigned stevegovuk/frontend-6f6744c6fb-gr8zf to ip-10-0-0-120.eu-west-1.compute.internal
+  Normal  SuccessfulMountVolume  54s   kubelet, ip-10-0-0-120.eu-west-1.compute.internal  MountVolume.SetUp succeeded for volume "default-token-rrpdm"
+  Normal  Pulling                53s   kubelet, ip-10-0-0-120.eu-west-1.compute.internal  pulling image "stevegovuk/onse-lab-intro-to-kubernetes:0.0.4"
+  Normal  Pulled                 51s   kubelet, ip-10-0-0-120.eu-west-1.compute.internal  Successfully pulled image "stevegovuk/onse-lab-intro-to-kubernetes:0.0.4"
+  Normal  Created                51s   kubelet, ip-10-0-0-120.eu-west-1.compute.internal  Created container
+  Normal  Started                51s   kubelet, ip-10-0-0-120.eu-west-1.compute.internal  Started container
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl exec -n stevegovuk -it frontend-6f6744c6fb-gr8zf -- ls -la
+total 36
+drwxr-xr-x 1 root root   165 Mar  6 10:10 .
+drwxr-xr-x 1 root root    25 Mar  5 15:16 ..
+-rwxr-xr-x 1 root root   294 Mar  6 10:10 app.py
+-rwxr-xr-x 1 root root   454 Mar  5 15:09 Dockerfile
+-rwxr-xr-x 1 root root    48 Mar  5 15:09 .dockerignore
+-rwxr-xr-x 1 root root  3127 Mar  5 15:09 Jenkinsfile
+drwxr-xr-x 2 root root    47 Mar  5 15:29 kubernetes
+-rwxr-xr-x 1 root root   159 Mar  5 15:09 Pipfile
+-rwxr-xr-x 1 root root 11159 Mar  5 15:09 Pipfile.lock
+drwxr-xr-x 2 root root    29 Mar  5 15:09 scripts
+-rwxr-xr-x 1 root root   274 Mar  5 15:09 test_app.py
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl exec -n stevegovuk -it frontend-6f6744c6fb-gr8zf -- /bin/bash
+root@frontend-6f6744c6fb-gr8zf:/opt/hello_world# env | sort
+APP_ROOT=/opt/hello_world
+HOME=/root
+HOSTNAME=frontend-6f6744c6fb-gr8zf
+KUBERNETES_INTRO_PORT_5000_TCP_ADDR=172.20.225.171
+KUBERNETES_INTRO_PORT_5000_TCP_PORT=5000
+KUBERNETES_INTRO_PORT_5000_TCP_PROTO=tcp
+KUBERNETES_INTRO_PORT_5000_TCP=tcp://172.20.225.171:5000
+KUBERNETES_INTRO_PORT=tcp://172.20.225.171:5000
+KUBERNETES_INTRO_SERVICE_HOST=172.20.225.171
+KUBERNETES_INTRO_SERVICE_PORT=5000
+KUBERNETES_PORT_443_TCP_ADDR=172.20.0.1
+KUBERNETES_PORT_443_TCP_PORT=443
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+KUBERNETES_PORT_443_TCP=tcp://172.20.0.1:443
+KUBERNETES_PORT=tcp://172.20.0.1:443
+KUBERNETES_SERVICE_HOST=172.20.0.1
+KUBERNETES_SERVICE_PORT=443
+KUBERNETES_SERVICE_PORT_HTTPS=443
+LANG=en_GB.UTF-8
+LANGUAGE=en_GB.UTF-8
+LC_ALL=en_GB.UTF-8
+LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PWD=/opt/hello_world
+RECIPIENT=world
+SHLVL=1
+TERM=xterm
+_=/usr/bin/env
+root@frontend-6f6744c6fb-gr8zf:/opt/hello_world# ipconfig
+bash: ipconfig: command not found
+root@frontend-6f6744c6fb-gr8zf:/opt/hello_world# exit
+exit
+command terminated with exit code 127
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl describe services
+Name:              kubernetes
+Namespace:         default
+Labels:            component=apiserver
+                   provider=kubernetes
+Annotations:       <none>
+Selector:          <none>
+Type:              ClusterIP
+IP:                172.20.0.1
+Port:              https  443/TCP
+TargetPort:        443/TCP
+Endpoints:         10.0.0.151:443,10.0.1.228:443
+Session Affinity:  None
+Events:            <none>
+
+
+Name:                     traefik-ingress
+Namespace:                default
+Labels:                   app=traefik
+                          chart=traefik-1.59.1
+                          heritage=Tiller
+                          release=traefik-ingress
+Annotations:              <none>
+Selector:                 app=traefik,release=traefik-ingress
+Type:                     LoadBalancer
+IP:                       172.20.139.56
+LoadBalancer Ingress:     abd69e68a1d7711e98eba06b8e503471-909715342.eu-west-1.elb.amazonaws.com
+Port:                     http  80/TCP
+TargetPort:               http/TCP
+NodePort:                 http  32572/TCP
+Endpoints:                10.0.1.155:80
+Port:                     https  443/TCP
+TargetPort:               httpn/TCP
+NodePort:                 https  31333/TCP
+Endpoints:                10.0.1.155:8880
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl describe services -n stevegovuk
+Name:                     kubernetes-intro
+Namespace:                stevegovuk
+Labels:                   app=kubernetes-intro
+Annotations:              kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"kubernetes-intro"},"name":"kubernetes-intro","namespace":"stevegovuk"...
+Selector:                 app=kubernetes-intro,tier=frontend
+Type:                     LoadBalancer
+IP:                       172.20.225.171
+LoadBalancer Ingress:     aba377c7a3f5b11e98eba06b8e503471-643662622.eu-west-1.elb.amazonaws.com
+Port:                     <unset>  5000/TCP
+TargetPort:               5000/TCP
+NodePort:                 <unset>  30890/TCP
+Endpoints:                10.0.0.31:5000
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl get pods-n stevegovuk
+error: the server doesn't have a resource type "pods-n"
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl get pods -n stevegovuk
+NAME                        READY     STATUS    RESTARTS   AGE
+frontend-6f6744c6fb-gr8zf   1/1       Running   0          11m
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl get pods -n stevegovuk
+NAME                        READY     STATUS    RESTARTS   AGE
+frontend-6f6744c6fb-gr8zf   1/1       Running   0          12m
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl get deployment -n stevegovuk
+NAME       DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+frontend   1         1         1            1           18h
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl get pods
+NAME                               READY     STATUS    RESTARTS   AGE
+traefik-ingress-85c9778d97-tvtpm   1/1       Running   0          5d
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl describe services -n stevegovuk
+Name:                     kubernetes-intro
+Namespace:                stevegovuk
+Labels:                   app=kubernetes-intro
+Annotations:              kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"v1","kind":"Service","metadata
+":{"annotations":{},"labels":{"app":"kubernetes-intro"},"name":"kubernetes-intro","namespace":"stevegovuk"...
+Selector:                 app=kubernetes-intro,tier=frontend
+Type:                     LoadBalancer
+IP:                       172.20.225.171
+LoadBalancer Ingress:     aba377c7a3f5b11e98eba06b8e503471-643662622.eu-west-1.elb.amazonaws.com
+Port:                     <unset>  5000/TCP
+TargetPort:               5000/TCP
+NodePort:                 <unset>  30890/TCP
+Endpoints:                10.0.0.31:5000
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>kubectl -n stevegovuk set env deployment/frontend RECEIVER='qwertyuiop'
+deployment.apps "frontend" env updated
+
+C:\Users\User12\Code\day-2\onse-lab-intro-to-kubernetes>
